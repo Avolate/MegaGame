@@ -8,23 +8,21 @@ class GameMain
 {
 private:
     int health;
-  /*  int candycount;
-    int cakecount;
-    int donutcount;
-    int trashcount;*/
     const std::string& background;
-    std::string game_status;
+    std::string gamestatus;
 public:
     static const int floorY = 5;
     static const int maxfloorY = 20;
     static const int maxfloorX = 40;
     static const int maxspeed = 5;
+    static const int playersize = 10;
+    static const int countchange = 1;
     GameMain(int h, const std::string & bg, std::string status );
     ~GameMain();
-    void start();
-    void changeStatus();
-    bool winCheck(int count_candy, int count_cake, int count_donut);
-    bool loseCheck();
-    void displayInfo() const;
+    void Start();
+    void ChangeStatus();
+    bool WinCheck(int countcandy, int countcake, int countdonut);
+    bool LoseCheck();
+    void DisplayInfo() const;
 };
 

@@ -8,16 +8,16 @@ private:
     std::string sprite;
 
 public:
-    GameObject(int x, int y, const std::string &sprite_path);
+    GameObject(int x, int y, const std::string &spritepath);
     ~GameObject(); 
     // Getter
-    int getpositionX() const;
-    int getpositionY() const;
-    std::string getsprite() const;
+    int GetpositionX() const;
+    int GetpositionY() const;
+    std::string Getsprite() const;
     // Setter
-    void setpositionX(int count);
-    void setpositionY(int count);
-    void setsprite(std::string bg);
-    virtual void displayInfo() const;
+    void SetpositionX(int count);
+    void SetpositionY(int count);
+    void Setsprite(std::string bg);
+    virtual void DisplayInfo() const;
 };
 

@@ -5,11 +5,11 @@ class Heart :
     public FallingObject
 {
 public:
-    Heart(int x, int y, std::string spr, int spd, int num, bool p_touch, bool f_touch);
+    Heart(int x, int y, std::string spr, int spd, int num, bool ptouch, bool ftouch);
     ~Heart();
 
-    void playerCatchHeart(int playerX, int playerY);
-    void plusHealth(int& health);
+    void PlayerCatchHeart(int playerX, int playerY);
+    void PlusHealth(int& health);
 
 };
 

@@ -2,21 +2,22 @@
 #include <iostream>
 #include <cstdlib>
 #include <string>
-Heart::Heart(int x, int y,   std::string sprite_path, int spd, int num, bool p_touch, bool f_touch):
-    FallingObject(x, y, sprite_path, spd, num, p_touch, f_touch) {
+#include "GameMain.h"
+Heart::Heart(int x, int y,   std::string spritepath, int spd, int num, bool ptouch, bool ftouch):
+    FallingObject(x, y, spritepath, spd, num, ptouch, ftouch) {
     std::cout << "Объект Heart создан" << std::endl;
 }
 Heart::~Heart() {
     std::cout << "Объект Heart уничтожен" << std::endl;
 }
-void Heart::playerCatchHeart(int playerX, int playerY) {
-    if (abs(abs(getpositionX() - playerX) < 10 && abs(getpositionY() - playerY) < 10) < 10) {
-        setplayer_touch (true);
+void Heart::PlayerCatchHeart(int playerX, int playerY) {
+    if (abs(GetpositionX() - playerX) < GameMain::playersize && abs(GetpositionY() - playerY) < GameMain::playersize) {
+        Setplayertouch (true);
         std::cout << "Heart пойман игроком!" << std::endl;
     }
 }
 
-void Heart::plusHealth(int &health) {
+void Heart::PlusHealth(int &health) {
     health+=1;
     std::cout << "Здоровье увеличено. Текущее здоровье: " << health << std::endl;
 

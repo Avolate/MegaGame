@@ -1,20 +1,20 @@
 #pragma once
-class Sweets_distribution
+class SweetsDistribution
 {
 private:
    
    
-    Sweets_distribution();
+    SweetsDistribution();
 public:
     static const int fix_count = 9;
     static const int max_count = 30;
-    static int count_candy;
-    static int count_cake;
-    static int count_donut;
-    static int count_trash;
-    static int countCakeChoice();
-    static int countTrashChoice();
-    static int countCandyChoice();
-    static int countDonutChoice();
+    static int countcandy;
+    static int countcake;
+    static int countdonut;
+    static int counttrash;
+    static int CountCakeChoice();
+    static int CountTrashChoice();
+    static int CountCandyChoice();
+    static int CountDonutChoice();
 };
 

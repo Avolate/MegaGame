@@ -2,39 +2,39 @@
 #include <iostream> // For cout
 #include <cstdlib> // For abs()
 #include <string>
-
-Sweet::Sweet(int x, int y,  std::string sprite_path, int spd, int num, bool p_touch, bool f_touch) :
-    FallingObject(x, y, sprite_path, spd, num, p_touch, f_touch) {
+#include "GameMain.h"
+Sweet::Sweet(int x, int y,  std::string spritepath, int spd, int num, bool ptouch, bool ftouch) :
+    FallingObject(x, y, spritepath, spd, num, ptouch, ftouch) {
     std::cout << "ќбъект Sweet создан" << std::endl;
 }
 Sweet::~Sweet() {
     std::cout << "ќбъект Sweet уничтожен" << std::endl;
 }
-void Sweet::playerCatchSweet(int playerX, int playerY){
-    if (abs(getpositionX() - playerX) < 10 && abs(getpositionY() - playerY) < 10) {
-        setplayer_touch (true) ;
+void Sweet::PLayerCatchSweet(int playerX, int playerY){
+    if (abs(GetpositionX() - playerX) < GameMain::playersize && abs(GetpositionY() - playerY) < GameMain::playersize) {
+        Setplayertouch (true) ;
         std::cout << "Sweet пойман игроком!" << std::endl;
     }
 }
 
-void Sweet::sweetTouchFloor() {
-    if (getpositionY() <= GameMain::floorY) {
-        setfloor_touch (true);
+void Sweet::SweetTouchFloor() {
+    if (GetpositionY() <= GameMain::floorY) {
+        Setfloortouch (true);
         std::cout << "Sweet коснулс€ пола" << std::endl;
     }
 } 
-void Sweet::changeCandy(int& count_candy) {
-    count_candy-=1;
-    std::cout << "—четчик конфет уменьшен: " << count_candy << std::endl;
+void Sweet::ChangeCandy(int& countcandy) {
+    countcandy-= GameMain::countchange;
+    std::cout << "—четчик конфет уменьшен: " << countcandy << std::endl;
 }
 
-void Sweet::changeCake(int& count_cake) {
-    count_cake-=1;
-    std::cout << "—четчик тортов уменьшен: " << count_cake << std::endl;
+void Sweet::ChangeCake(int& countcake) {
+    countcake-= GameMain::countchange;
+    std::cout << "—четчик тортов уменьшен: " << countcake << std::endl;
 }
 
-void Sweet::changeDonut(int& count_donut) {
-    count_donut-=1;
-    std::cout << "—четчик пончиков уменьшен: " << count_donut << std::endl;
+void Sweet::ChangeDonut(int& countdonut) {
+    countdonut-= GameMain::countchange;
+    std::cout << "—четчик пончиков уменьшен: " << countdonut << std::endl;
 }
 

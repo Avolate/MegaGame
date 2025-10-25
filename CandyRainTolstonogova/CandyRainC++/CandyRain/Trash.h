@@ -5,8 +5,8 @@ class Trash :
     public FallingObject
 {
 public:
-    Trash(int x , int y , std::string sprite_path, int spd, int num , bool p_touch , bool f_touch);
+    Trash(int x , int y , std::string spritepath, int spd, int num , bool ptouch , bool ftouch);
     ~Trash();
-    void playerCatchTrash(int playerX, int playerY);
+    void PlayerCatchTrash(int playerX, int playerY);
 };
 

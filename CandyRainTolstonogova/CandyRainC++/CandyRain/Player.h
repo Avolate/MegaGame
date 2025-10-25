@@ -7,14 +7,14 @@ private:
     int speed;
     bool life;
 public:
-    Player(int x , int y , const std::string& sprite_path , int spd , bool alive );
+    Player(int x , int y , const std::string& spritepath , int spd , bool alive );
     ~Player();
-    void moveRight();
-    void moveLeft();
+    void MoveRight();
+    void MoveLeft();
     // Getter
-    int getlife() const;
+    int GetLife() const;
 
     // Setter
-    void setlife(int count);
+    void SetLife(int count);
 };
 

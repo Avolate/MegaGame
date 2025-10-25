@@ -9,18 +9,18 @@ private:
     bool player_touch;
     bool floor_touch;
 public:
-    FallingObject(int x , int y , std::string sprite_path, int spd, int num , bool p_touch, bool f_touch);
+    FallingObject(int x , int y , std::string spritepath, int spd, int num , bool ptouch, bool ftouch);
     virtual ~FallingObject();
-    void falling();
-    void minusHealth(int &health);
-    void displayInfo();
+    void Falling();
+    void MinusHealth(int &health);
+    void DisplayInfo();
     // Getter
-    int getnumb() const;
-    bool getplayer_touch() const;
-    bool getfloor_touch() const;
+    int Getnumb() const;
+    bool Getplayertouch() const;
+    bool Getfloortouch() const;
     // Setter
-    void setnumb(int count);
-    void setplayer_touch(bool count);
-    void setfloor_touch(bool count);
+    void Setnumb(int count);
+    void Setplayertouch(bool count);
+    void Setfloortouch(bool count);
 };
 

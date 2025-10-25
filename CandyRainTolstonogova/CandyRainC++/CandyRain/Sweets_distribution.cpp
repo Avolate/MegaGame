@@ -4,34 +4,34 @@
 #include "Sweets_distribution.h"
 
 
-Sweets_distribution::Sweets_distribution() {};
+SweetsDistribution::SweetsDistribution() {};
 
-int Sweets_distribution::count_trash = 0;
-int Sweets_distribution::count_candy = 0;
-int Sweets_distribution::count_cake = 0;
-int Sweets_distribution::count_donut = 0;
+int SweetsDistribution::counttrash = 0;
+int SweetsDistribution::countcandy = 0;
+int SweetsDistribution::countcake = 0;
+int SweetsDistribution::countdonut = 0;
 
-int Sweets_distribution::countCandyChoice() {
+int SweetsDistribution::CountCandyChoice() {
     srand(time(nullptr));
-    count_candy = rand() % fix_count+1;
-    std::cout << "Количество конфет выбрано: " << count_candy << std::endl;
-    return count_candy;
+    countcandy = rand() % fix_count+1;
+    std::cout << "Количество конфет выбрано: " << countcandy << std::endl;
+    return countcandy;
 }
 
-int Sweets_distribution::countCakeChoice() {
-    count_cake = rand() % fix_count+1;
-    std::cout << "Количество тортов выбрано: " << count_cake << std::endl;
-    return count_cake;
+int SweetsDistribution::CountCakeChoice() {
+    countcake = rand() % fix_count+1;
+    std::cout << "Количество тортов выбрано: " << countcake << std::endl;
+    return countcake;
 }
 
-int Sweets_distribution::countDonutChoice() {
-    count_donut = rand() % fix_count + 1;
-    std::cout << "Количество пончиков выбрано: " << count_donut << std::endl;
-    return count_donut;
+int SweetsDistribution::CountDonutChoice() {
+    countdonut = rand() % fix_count + 1;
+    std::cout << "Количество пончиков выбрано: " << countdonut << std::endl;
+    return countdonut;
 }
-int Sweets_distribution::countTrashChoice() {
-    count_trash = max_count - (count_candy + count_cake + count_donut);
-    std::cout << "Количество мусора загружено: " << count_trash << std::endl;
-    return count_trash;
+int SweetsDistribution::CountTrashChoice() {
+    counttrash = max_count - (countcandy + countcake + countdonut);
+    std::cout << "Количество мусора загружено: " << counttrash << std::endl;
+    return counttrash;
 
 }

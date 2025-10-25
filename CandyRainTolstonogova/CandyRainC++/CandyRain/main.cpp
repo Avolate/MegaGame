@@ -12,52 +12,56 @@ int main() {
     SetConsoleCP(1251);
     int health = 3;
     GameMain game(health, "back_ground.png", "paused");
-    game.start();
+    game.Start();
     srand(time(nullptr));
-    int candycount = Sweets_distribution::countCandyChoice();
-    int donutcount = Sweets_distribution::countDonutChoice();
-    int cakecount = Sweets_distribution::countCakeChoice();
-    const int trashcount = Sweets_distribution::countTrashChoice();
+    int candycount = SweetsDistribution::CountCandyChoice();
+    int donutcount = SweetsDistribution::CountDonutChoice();
+    int cakecount = SweetsDistribution::CountCakeChoice();
+    const int trashcount = SweetsDistribution::CountTrashChoice();
 
     //статическая инициализация
     Player sweetTooth(rand() % GameMain::maxfloorX + 1, GameMain::floorY, "player.png", 2, true);
-    sweetTooth.displayInfo();
-
+    sweetTooth.DisplayInfo();
+    int candynum = 1;
+    int donutnum = 2;
+    int cakenum = 3;
+    const int trashnum =4;
+    int heartnum = 5;
     //динамическая инициализация объектов
-    Heart* fallheart = new Heart(rand() % GameMain::maxfloorX + 1, GameMain::maxfloorY, "heart.png", rand() % GameMain::maxspeed + 1, 5, false, false);
-    fallheart->displayInfo();
-    fallheart->plusHealth(health);
+    Heart* fallheart = new Heart(rand() % GameMain::maxfloorX + 1, GameMain::maxfloorY, "heart.png", rand() % GameMain::maxspeed + 1, heartnum, false, false);
+    fallheart->DisplayInfo();
+    fallheart->PlusHealth(health);
     const int size = 3;
     //динамический массив объектов
     Sweet* sweet = new Sweet[size]
     {
-        Sweet(rand() % GameMain::maxfloorX + 1, GameMain::maxfloorY, "candy.png", rand() % GameMain::maxspeed + 1, 1, false, false),
-        Sweet(rand() % GameMain::maxfloorX + 1, GameMain::maxfloorY, "kake.png", rand() % GameMain::maxspeed + 1, 2, false, false),
-        Sweet(rand() % GameMain::maxfloorX + 1, GameMain::maxfloorY, "donut.png",rand() % GameMain::maxspeed + 1, 3, false, false)
+        Sweet(rand() % GameMain::maxfloorX + 1, GameMain::maxfloorY, "candy.png", rand() % GameMain::maxspeed + 1, candynum, false, false),
+        Sweet(rand() % GameMain::maxfloorX + 1, GameMain::maxfloorY, "kake.png", rand() % GameMain::maxspeed + 1,  donutnum, false, false),
+        Sweet(rand() % GameMain::maxfloorX + 1, GameMain::maxfloorY, "donut.png",rand() % GameMain::maxspeed + 1, cakenum, false, false)
     };
     for (int i = 0; i < size; i++) {
-        sweet[i].displayInfo();
+        sweet[i].DisplayInfo();
     }
     //массив динамических объектов
     Trash* ArTrash[size];
     for (int i = 0; i < size; i++) {
-        ArTrash[i] = new Trash(rand() % GameMain::maxfloorX + 1, GameMain::maxfloorY, "trash.png", rand() % GameMain::maxspeed + 1, 4, false, false);
-        ArTrash[i]->displayInfo();
+        ArTrash[i] = new Trash(rand() % GameMain::maxfloorX + 1, GameMain::maxfloorY, "trash.png", rand() % GameMain::maxspeed + 1, trashnum, false, false);
+        ArTrash[i]->DisplayInfo();
     }
-    sweetTooth.moveRight();
+    sweetTooth.MoveRight();
     int player_x = 30;
     int player_y = 5;
     for (int i = 0; i < size; i++) {
-        sweet[i].falling();
-        sweet[i].playerCatchSweet(player_x, player_y);
-        sweet[i].sweetTouchFloor();
-        ArTrash[i]->falling();
-        ArTrash[i]->playerCatchTrash(player_x, player_y);
+        sweet[i].Falling();
+        sweet[i].PLayerCatchSweet(player_x, player_y);
+        sweet[i].SweetTouchFloor();
+        ArTrash[i]->Falling();
+        ArTrash[i]->PlayerCatchTrash(player_x, player_y);
     }
-    sweet[2].changeCandy(candycount);
-    sweet[1].minusHealth(health);
-    game.winCheck(candycount, cakecount, donutcount);
-    game.loseCheck();
+    sweet[2].ChangeCandy(candycount);
+    sweet[1].MinusHealth(health);
+    game.WinCheck(candycount, cakecount, donutcount);
+    game.LoseCheck();
 
     delete[] sweet;
     for (int i = 0; i < size; i++) {
