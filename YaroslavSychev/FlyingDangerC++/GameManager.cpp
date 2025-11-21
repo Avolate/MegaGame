@@ -26,28 +26,28 @@ GameManager::~GameManager() {
     enemies.clear();
 }
 
-void GameManager::run() {
+void GameManager::Run() {
     cout << "Метод run() класса GameManager запущен" << endl;
 }
 
-void GameManager::switch_state() {
+void GameManager::SwitchState() {
     cout << "Метод switch_state() класса GameManager выполнен" << endl;
 }
 
-void GameManager::check_win_conditions() {
+void GameManager::CheckWinConditions() {
     cout << "Метод check_win_conditions() класса GameManager выполнен" << endl;
 }
 
-void GameManager::handle_events() {
+void GameManager::HandleEvents() {
     cout << "Метод handle_events() класса GameManager выполнен" << endl;
 }
 
-void GameManager::addEnemy(Enemy* enemy) {
+void GameManager::AddEnemy(Enemy* enemy) {
     enemies.push_back(enemy);
     cout << "Враг добавлен в GameManager" << endl;
 }
 
-void GameManager::removeEnemy(Enemy* enemy) {
+void GameManager::RemoveEnemy(Enemy* enemy) {
     // Поиск и удаление врага из вектора
     for (auto it = enemies.begin(); it != enemies.end(); ++it) {
         if (*it == enemy) {

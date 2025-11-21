@@ -1,14 +1,14 @@
-#ifndef PLAYER_HPP
-#define PLAYER_HPP
+#pragma once
 
 #include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
 
-// Предварительное объявление
+// Предварительные объявления
 class Projectile;
 class GameManager;
+class Meteor;
 
 class Player {
 private:
@@ -18,6 +18,7 @@ private:
     int speed;
     bool is_alive;
     float shoot_cooldown;
+    int score;  // Добавляем счет игрока
 
     // Агрегация: Player создает снаряды, но не владеет их временем жизни полностью
     vector<Projectile*> projectiles;
@@ -28,17 +29,25 @@ private:
 public:
     Player();
     Player(GameManager* gm);
+    Player(const Player& other);
     ~Player();
 
-    void move(const string& mouse_pos);
-    void shoot();
-    void take_damage();
-    void update();
-    void draw();
+    void Move(const string& mouse_pos);
+    void Shoot();
+    void TakeDamage();
+    void Update();
+    void Draw();
+
+    // Перегрузка оператора + для добавления очков при попадании по метеору
+    Player& operator+(Meteor* meteor);
 
     // Методы для управления снарядами
-    void addProjectile(Projectile* projectile);
-    void removeProjectile(Projectile* projectile);
-};
+    void AddProjectile(Projectile* projectile);
+    void RemoveProjectile(Projectile* projectile);
 
-#endif
+    // Геттер для счета
+    int GetScore() const { return score; }
+
+    // Работа со строками
+    string GetPlayerInfo() const;
+};

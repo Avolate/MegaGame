@@ -1,73 +1,113 @@
-#include "Boss.hpp"
+ï»¿#include "Boss.hpp"
 #include "GameManager.hpp"
 
-Boss::Boss() : Enemy(), phase(1), size(10), damage(30) {
-    cout << "Îáúåêò êëàññà Boss ñîçäàí" << endl;
+int firstPhase = 1;
+int currentPhase = 1;
+int defaultBossSize = 10;
+int defaultBossDamage = 30;
+int dopSpeed = 2;
+int dopDamage = 10;
+float healthKoef = 0.5;
+
+Boss::Boss() : Enemy(), phase(currentPhase), size(defaultBossSize), damage(defaultBossDamage) {
+    cout << "ÐžÐ±ÑŠÐµÐºÑ‚ ÐºÐ»Ð°ÑÑÐ° Boss ÑÐ¾Ð·Ð´Ð°Ð½" << endl;
 }
 
 Boss::Boss(int hp, int spd, int ph, int sz, int dmg) : Enemy(hp, spd), phase(ph), size(sz), damage(dmg) {
-    cout << "Îáúåêò êëàññà Boss ñîçäàí ñ ïàðàìåòðàìè" << endl;
+    cout << "ÐžÐ±ÑŠÐµÐºÑ‚ ÐºÐ»Ð°ÑÑÐ° Boss ÑÐ¾Ð·Ð´Ð°Ð½ Ñ Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð°Ð¼Ð¸" << endl;
 }
 
 Boss::Boss(int hp, int spd, int ph, int sz, int dmg, GameManager* gm) : Enemy(hp, spd, gm), phase(ph), size(sz), damage(dmg) {
-    cout << "Îáúåêò êëàññà Boss ñîçäàí ñ ññûëêîé íà GameManager" << endl;
+    cout << "ÐžÐ±ÑŠÐµÐºÑ‚ ÐºÐ»Ð°ÑÑÐ° Boss ÑÐ¾Ð·Ð´Ð°Ð½ Ñ ÑÑÑ‹Ð»ÐºÐ¾Ð¹ Ð½Ð° GameManager" << endl;
+}
+
+Boss::Boss(const Boss& other) : Enemy(other), phase(other.phase), size(other.size), damage(other.damage) {
+    cout << "ÐšÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€ ÐºÐ¾Ð¿Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð¸Ñ Boss Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½" << endl;
 }
 
 Boss::~Boss() {
-    cout << "Îáúåêò êëàññà Boss óíè÷òîæåí" << endl;
+    cout << "ÐžÐ±ÑŠÐµÐºÑ‚ ÐºÐ»Ð°ÑÑÐ° Boss ÑƒÐ½Ð¸Ñ‡Ñ‚Ð¾Ð¶ÐµÐ½" << endl;
 }
 
-void Boss::move() {
-    cout << "Ìåòîä move() êëàññà Boss âûïîëíåí" << endl;
-    cout << "Áîññ ôàçû " << phase << " äâèæåòñÿ ê öåëè" << endl;
+void Boss::Move() {
+    cout << "ÐœÐµÑ‚Ð¾Ð´ move() ÐºÐ»Ð°ÑÑÐ° Boss Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½" << endl;
+    cout << "Ð‘Ð¾ÑÑ Ñ„Ð°Ð·Ñ‹ " << phase << " Ð´Ð²Ð¸Ð¶ÐµÑ‚ÑÑ Ðº Ñ†ÐµÐ»Ð¸" << endl;
 }
 
-void Boss::take_damage(int amount) {
+void Boss::TakeDamage(int amount) {
     health -= amount;
-    cout << "Ìåòîä take_damage() êëàññà Boss âûïîëíåí" << endl;
-    cout << "Ïîëó÷åíî óðîíà: " << amount << ", îñòàëîñü çäîðîâüÿ: " << health << endl;
+    cout << "ÐœÐµÑ‚Ð¾Ð´ take_damage() ÐºÐ»Ð°ÑÑÐ° Boss Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½" << endl;
+    cout << "ÐŸÐ¾Ð»ÑƒÑ‡ÐµÐ½Ð¾ ÑƒÑ€Ð¾Ð½Ð°: " << amount << ", Ð¾ÑÑ‚Ð°Ð»Ð¾ÑÑŒ Ð·Ð´Ð¾Ñ€Ð¾Ð²ÑŒÑ: " << health << endl;
 
-    if (health < max_health * 0.5 && phase == 1) {
-        change_phase();
+    if (health < max_health * healthKoef && phase == firstPhase) {
+        ChangePhase();
     }
 
-    if (!isAlive()) {
-        cout << "Áîññ ïîáåæäåí!" << endl;
+    if (!IsAlive()) {
+        cout << "Ð‘Ð¾ÑÑ Ð¿Ð¾Ð±ÐµÐ¶Ð´ÐµÐ½!" << endl;
     }
 }
 
-bool Boss::check_collision(const string& target) {
-    cout << "Ìåòîä check_collision() êëàññà Boss âûïîëíåí ñ öåëüþ: " << target << endl;
+bool Boss::CheckCollision(const string& target) {
+    cout << "ÐœÐµÑ‚Ð¾Ð´ check_collision() ÐºÐ»Ð°ÑÑÐ° Boss Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½ Ñ Ñ†ÐµÐ»ÑŒÑŽ: " << target << endl;
     return true;
 }
 
-void Boss::update() {
-    cout << "Ìåòîä update() êëàññà Boss âûïîëíåí" << endl;
+void Boss::Update() {
+    cout << "ÐœÐµÑ‚Ð¾Ð´ update() ÐºÐ»Ð°ÑÑÐ° Boss Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½" << endl;
 
-    // Ëîãèêà îáíîâëåíèÿ áîññà
-    move();
+    // Ð›Ð¾Ð³Ð¸ÐºÐ° Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ñ Ð±Ð¾ÑÑÐ°
+    Move();
 
-    // Ñïåöèàëüíûå àòàêè â çàâèñèìîñòè îò ôàçû
-    if (phase > 1) {
-        cout << "Áîññ èñïîëüçóåò ñïåöèàëüíóþ àòàêó ôàçû " << phase << endl;
+    // Ð¡Ð¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½Ñ‹Ðµ Ð°Ñ‚Ð°ÐºÐ¸ Ð² Ð·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð¾ÑÑ‚Ð¸ Ð¾Ñ‚ Ñ„Ð°Ð·Ñ‹
+    if (phase > firstPhase) {
+        cout << "Ð‘Ð¾ÑÑ Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·ÑƒÐµÑ‚ ÑÐ¿ÐµÑ†Ð¸Ð°Ð»ÑŒÐ½ÑƒÑŽ Ð°Ñ‚Ð°ÐºÑƒ Ñ„Ð°Ð·Ñ‹ " << phase << endl;
     }
 }
 
-void Boss::draw() {
-    cout << "Ìåòîä draw() êëàññà Boss âûïîëíåí" << endl;
-    cout << "Îòðèñîâêà áîññà ðàçìåðà " << size << " â ôàçå " << phase << endl;
+void Boss::Draw() {
+    cout << "ÐœÐµÑ‚Ð¾Ð´ draw() ÐºÐ»Ð°ÑÑÐ° Boss Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½" << endl;
+    cout << "ÐžÑ‚Ñ€Ð¸ÑÐ¾Ð²ÐºÐ° Ð±Ð¾ÑÑÐ° Ñ€Ð°Ð·Ð¼ÐµÑ€Ð° " << size << " Ð² Ñ„Ð°Ð·Ðµ " << phase << endl;
 }
 
-void Boss::apply_damage(int amount) {
-    cout << "Ìåòîä apply_damage() êëàññà Boss âûïîëíåí" << endl;
-    take_damage(amount);
+void Boss::ApplyDamage(int amount) {
+    cout << "ÐœÐµÑ‚Ð¾Ð´ apply_damage() ÐºÐ»Ð°ÑÑÐ° Boss Ð²Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½" << endl;
+    TakeDamage(amount);
 }
 
-void Boss::change_phase() {
+void Boss::ChangePhase() {
     phase++;
-    cout << "Áîññ ïåðåøåë â ôàçó " << phase << "!" << endl;
-    cout << "Ñêîðîñòü è óðîí óâåëè÷åíû!" << endl;
+    cout << "Ð‘Ð¾ÑÑ Ð¿ÐµÑ€ÐµÑˆÐµÐ» Ð² Ñ„Ð°Ð·Ñƒ " << phase << "!" << endl;
+    cout << "Ð¡ÐºÐ¾Ñ€Ð¾ÑÑ‚ÑŒ Ð¸ ÑƒÑ€Ð¾Ð½ ÑƒÐ²ÐµÐ»Ð¸Ñ‡ÐµÐ½Ñ‹!" << endl;
 
-    speed += 2;
-    damage += 10;
+    speed += dopSpeed;
+    damage += dopDamage;
+}
+
+// ÐŸÐµÑ€ÐµÐ³Ñ€ÑƒÐ·ÐºÐ° Ð¾Ð¿ÐµÑ€Ð°Ñ‚Ð¾Ñ€Ð° << Ð´Ð»Ñ ÑƒÐ¼ÐµÐ½ÑŒÑˆÐµÐ½Ð¸Ñ Ñ€Ð°Ð·Ð¼ÐµÑ€Ð° Ð¿Ñ€Ð¸ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ð¸ ÑƒÑ€Ð¾Ð½Ð°
+ostream& operator<<(ostream& os, Boss& boss) {
+    // Ð£Ð¼ÐµÐ½ÑŒÑˆÐ°ÐµÐ¼ Ñ€Ð°Ð·Ð¼ÐµÑ€ Ð±Ð¾ÑÑÐ° Ð¿Ñ€Ð¸ Ð²Ñ‹Ð²Ð¾Ð´Ðµ (ÑÐ¸Ð¼ÑƒÐ»ÑÑ†Ð¸Ñ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ ÑƒÑ€Ð¾Ð½Ð°)
+    if (boss.size > 3) {
+        boss.size--;
+        cout << "Ð‘Ð¾ÑÑ ÑƒÐ¼ÐµÐ½ÑŒÑˆÐ¸Ð»ÑÑ Ð² Ñ€Ð°Ð·Ð¼ÐµÑ€Ðµ Ð¿Ð¾ÑÐ»Ðµ Ð¿Ð¾Ð»ÑƒÑ‡ÐµÐ½Ð¸Ñ ÑƒÑ€Ð¾Ð½Ð°! ÐÐ¾Ð²Ñ‹Ð¹ Ñ€Ð°Ð·Ð¼ÐµÑ€: " << boss.size << endl;
+    }
+
+    os << "Boss: Phase=" << boss.phase << ", Size=" << boss.size
+        << ", Damage=" << boss.damage << ", Health=" << boss.health;
+    return os;
+}
+
+// Ð”Ñ€ÑƒÐ¶ÐµÑÑ‚Ð²ÐµÐ½Ð½Ð°Ñ Ñ„ÑƒÐ½ÐºÑ†Ð¸Ñ Ð´Ð»Ñ Ð°Ð½Ð°Ð»Ð¸Ð·Ð° Ð±Ð¾ÑÑÐ°
+void AnalyzeBoss(const Boss& boss) {
+    cout << "\n=== ÐÐÐÐ›Ð˜Ð— Ð‘ÐžÐ¡Ð¡Ð ===" << endl;
+    cout << "Ð¤Ð°Ð·Ð°: " << boss.phase << endl;
+    cout << "Ð Ð°Ð·Ð¼ÐµÑ€: " << boss.size << endl;
+    cout << "Ð£Ñ€Ð¾Ð½: " << boss.damage << endl;
+    cout << "Ð—Ð´Ð¾Ñ€Ð¾Ð²ÑŒÐµ: " << boss.health << "/" << boss.max_health << endl;
+    cout << "Ð¡ÐºÐ¾Ñ€Ð¾ÑÑ‚ÑŒ: " << boss.speed << endl;
+
+    if (boss.phase > 1) {
+        cout << "Ð‘Ð¾ÑÑ Ð² ÑƒÑÐ¸Ð»ÐµÐ½Ð½Ð¾Ð¹ Ñ„Ð°Ð·Ðµ! Ð‘ÑƒÐ´ÑŒÑ‚Ðµ Ð¾ÑÑ‚Ð¾Ñ€Ð¾Ð¶Ð½Ñ‹!" << endl;
+    }
+    cout << "=====================" << endl;
 }

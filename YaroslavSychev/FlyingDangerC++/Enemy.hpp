@@ -1,5 +1,4 @@
-#ifndef ENEMY_HPP
-#define ENEMY_HPP
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -25,17 +24,18 @@ public:
     Enemy();
     Enemy(int hp, int spd);
     Enemy(int hp, int spd, GameManager* gm);
+    Enemy(const Enemy& other);
     virtual ~Enemy() = default;
 
-    virtual void move() = 0;
-    virtual void take_damage(int amount) = 0;
-    virtual bool check_collision(const string& target) = 0;
-    virtual void update() = 0;
-    virtual void draw() = 0;
+    virtual void Move() = 0;
+    virtual void TakeDamage(int amount) = 0;
+    virtual bool CheckCollision(const string& target) = 0;
+    virtual void Update() = 0;
+    virtual void Draw() = 0;
 
     // Общие методы для всех врагов
-    void attackCastle(Castle* castle);
-    bool isAlive() const { return health > 0; }
+    void AttackCastle(Castle* castle);
+    bool IsAlive() const { return health > 0; }
 
     // Виртуальный метод для проверки границ
     virtual void check_boundaries() {
@@ -43,7 +43,13 @@ public:
     }
 
     // Геттер для max_health
-    int getMaxHealth() const { return max_health; }
-};
+    int GetMaxHealth() const { return max_health; }
 
-#endif
+    // Геттеры для доступа к полям
+    int GetHealth() const { return health; }
+    int GetSpeed() const { return speed; }
+    const string& GetPosition() const { return position; }
+
+    // Работа со строками
+    void SetPosition(const string& newPosition);
+};

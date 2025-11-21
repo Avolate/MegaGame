@@ -1,5 +1,4 @@
-#ifndef CASTLE_HPP
-#define CASTLE_HPP
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -8,7 +7,7 @@ using namespace std;
 class Castle {
 private:
     int health;
-    int max_health; 
+    int max_health;
     string position;
     string sprite;
     string rect;
@@ -16,15 +15,23 @@ private:
 public:
     Castle();
     Castle(int max_hp);
+    Castle(const Castle& other);
     ~Castle();
 
-    void take_damage(int amount);
-    bool is_destroyed();
-    void draw();
+    void TakeDamage(int amount);
+    bool IsDestroyed();
+    void Draw();
+
+    // Перегрузка оператора - для уменьшения здоровья замка
+    Castle& operator-(int damage);
+
+    // Дружественная функция для замка
+    friend void RepairCastle(Castle& castle, int amount);
 
     // Геттеры для доступа к состоянию
-    int getHealth() const { return health; }
-    int getMaxHealth() const { return max_health; }
-};
+    int GetHealth() const { return health; }
+    int GetMaxHealth() const { return max_health; }
 
-#endif
+    // Работа со строками
+    void SetPosition(const string& newPosition);
+};

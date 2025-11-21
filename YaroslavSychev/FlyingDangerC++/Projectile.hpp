@@ -1,5 +1,4 @@
-#ifndef PROJECTILE_HPP
-#define PROJECTILE_HPP
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -21,21 +20,37 @@ private:
     // Ссылка на игрока, который выпустил снаряд
     Player* owner;
 
+    // Статический счетчик активных снарядов
+    static int active_projectiles;
+    static const int MAX_PROJECTILES;
+
 public:
     Projectile();
     Projectile(const string& pos, const string& dir, int dmg);
     Projectile(const string& pos, const string& dir, int dmg, Player* player);
+    Projectile(const Projectile& other);
     ~Projectile();
 
-    void update();
-    bool check_collision(Enemy* enemy);
-    void on_hit();
-    void check_boundaries();
-    void draw();
+    void Update();
+    bool CheckCollision(Enemy* enemy);
+    void OnHit();
+    void CheckBoundaries();
+    void Draw();
+
+    // Перегрузка оператора == для проверки лимита снарядов
+    bool operator==(const Projectile& other) const;
 
     // Геттеры
-    bool isActive() const { return is_active; }
-    int getDamage() const { return damage; }
-};
+    bool IsActive() const { return is_active; }
+    int GetDamage() const { return damage; }
 
-#endif
+    // Статические методы для управления лимитом
+    static bool CanCreateProjectile() {
+        return active_projectiles < MAX_PROJECTILES;
+    }
+
+    // Работа со строками
+    string GetDescription() const {
+        return "Снаряд: урон=" + to_string(damage) + ", активных: " + to_string(active_projectiles);
+    }
+};

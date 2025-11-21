@@ -2,7 +2,13 @@
 #include "GameManager.hpp"
 #include "Castle.hpp"
 
-Enemy::Enemy() : health(50), max_health(50), speed(2), position(""), sprite(""), rect(""), game_manager(nullptr) {
+int currentMeteorHealth = 100;
+int maxMeteorHealth = 100;
+int defaultSpeed = 2;
+int defaultDamage = 10;
+
+
+Enemy::Enemy() : health(currentMeteorHealth), max_health(maxMeteorHealth), speed(defaultSpeed), position(""), sprite(""), rect(""), game_manager(nullptr) {
     cout << "Объект класса Enemy создан" << endl;
 }
 
@@ -16,9 +22,16 @@ sprite(""), rect(""), game_manager(gm) {
     cout << "Объект класса Enemy создан с ссылкой на GameManager" << endl;
 }
 
-void Enemy::attackCastle(Castle* castle) {
-    if (castle && isAlive()) {
+Enemy::Enemy(const Enemy& other) :
+    health(other.health), max_health(other.max_health), speed(other.speed),
+    position(other.position), sprite(other.sprite), rect(other.rect),
+    game_manager(other.game_manager) {
+    cout << "Конструктор копирования Enemy выполнен" << endl;
+}
+
+void Enemy::AttackCastle(Castle* castle) {
+    if (castle && IsAlive()) {
         cout << "Враг атакует замок!" << endl;
-        castle->take_damage(10);
+        castle->TakeDamage(defaultDamage);
     }
 }

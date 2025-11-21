@@ -1,11 +1,11 @@
-#ifndef GAMEMANAGER_HPP
-#define GAMEMANAGER_HPP
+#pragma once
 
 #include <iostream>
 #include <string>
 #include <vector>
 using namespace std;
 
+// Предварительные объявления
 class Castle;
 class Player;
 class Enemy;
@@ -27,18 +27,18 @@ public:
     GameManager();
     ~GameManager();
 
-    void run();
-    void switch_state();
-    void check_win_conditions();
-    void handle_events();
+    void Run();
+    void SwitchState();
+    void CheckWinConditions();
+    void HandleEvents();
 
     // Методы для управления объектами
-    void addEnemy(Enemy* enemy);
-    void removeEnemy(Enemy* enemy);
-    void update() {
+    void AddEnemy(Enemy* enemy);
+    void RemoveEnemy(Enemy* enemy);
+
+    // Встроенная реализация Update
+    void Update() {
         cout << "Метод update() класса GameManager выполнен" << endl;
         cout << "Обновление состояния всех игровых объектов..." << endl;
     }
 };
-
-#endif

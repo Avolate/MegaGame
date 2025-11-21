@@ -1,5 +1,4 @@
-#ifndef METEOR_HPP
-#define METEOR_HPP
+#pragma once
 
 #include "Enemy.hpp"
 #include <iostream>
@@ -17,13 +16,14 @@ public:
     Meteor();
     Meteor(int hp, int spd, int sz, int dmg);
     Meteor(int hp, int spd, int sz, int dmg, GameManager* gm);
+    Meteor(const Meteor& other);
     ~Meteor();
 
-    void move() override;
-    void take_damage(int amount) override;
-    bool check_collision(const string& target) override;
-    void update() override;
-    void draw() override;
+    void Move() override;
+    void TakeDamage(int amount) override;
+    bool CheckCollision(const string& target) override;
+    void Update() override;
+    void Draw() override;
 
     void apply_damage(int amount);
     void check_boundaries(); // днаюбкем мнбши лернд
@@ -33,4 +33,4 @@ public:
     int getDamage() const { return damage; }
 };
 
-#endif
+//#endif

@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <vector>
+#include <memory>
 #include "GameManager.hpp"
 #include "Castle.hpp"
 #include "Player.hpp"
@@ -24,7 +25,7 @@ int main() {
 
     // 3. Старт игры
     cout << "\n3. ЗАПУСК ИГРОВОГО ПРОЦЕССА:" << endl;
-    gameManager->run();
+    gameManager->Run();
 
     // 4. Создание врагов
     cout << "\n4. СОЗДАНИЕ ВРАГОВ:" << endl;
@@ -34,21 +35,21 @@ int main() {
 
     // 5. Добавление врагов в менеджер
     cout << "\n5. ДОБАВЛЕНИЕ ВРАГОВ В ИГРУ:" << endl;
-    gameManager->addEnemy(meteor1);
-    gameManager->addEnemy(meteor2);
-    gameManager->addEnemy(boss);
+    gameManager->AddEnemy(meteor1);
+    gameManager->AddEnemy(meteor2);
+    gameManager->AddEnemy(boss);
 
     // 6. Действия игрока
     cout << "\n6. ДЕЙСТВИЯ ИГРОКА:" << endl;
-    player->move("100,150");
-    player->shoot();
-    player->update();
+    player->Move("100,150");
+    player->Shoot();
+    player->Update();
 
     // 7. Движение врагов
     cout << "\n7. ДВИЖЕНИЕ ВРАГОВ:" << endl;
-    meteor1->move();
-    meteor2->move();
-    boss->move();
+    meteor1->Move();
+    meteor2->Move();
+    boss->Move();
 
     // 8. Создание снарядов
     cout << "\n8. СОЗДАНИЕ СНАРЯДОВ:" << endl;
@@ -57,23 +58,23 @@ int main() {
 
     // 9. Обновление снарядов
     cout << "\n9. ОБНОВЛЕНИЕ СНАРЯДОВ:" << endl;
-    projectile1->update();
-    projectile2->update();
+    projectile1->Update();
+    projectile2->Update();
 
     // 10. Атаки и получение урона
     cout << "\n10. АТАКИ И ПОЛУЧЕНИЕ УРОНА:" << endl;
-    meteor1->take_damage(15);
-    meteor2->take_damage(20);
-    castle->take_damage(25);
+    meteor1->TakeDamage(15);
+    meteor2->TakeDamage(20);
+    castle->TakeDamage(25);
 
     // 11. Проверка столкновений
     cout << "\n11. ПРОВЕРКА СТОЛКНОВЕНИЙ:" << endl;
-    projectile1->check_collision(meteor1);
-    meteor1->check_collision("castle");
+    projectile1->CheckCollision(meteor1);
+    meteor1->CheckCollision("castle");
 
     // 12. Смена фазы босса
     cout << "\n12. СМЕНА ФАЗЫ БОССА:" << endl;
-    boss->take_damage(200);
+    boss->TakeDamage(200);
 
     // 13. Демонстрация полиморфизма
     cout << "\n13. ПОЛИМОРФИЗМ:" << endl;
@@ -83,15 +84,15 @@ int main() {
     enemies.push_back(boss);
 
     for (Enemy* enemy : enemies) {
-        enemy->update();
-        enemy->draw();
+        enemy->Update();
+        enemy->Draw();
     }
 
     // 14. Динамический массив объектов
     cout << "\n14. ДИНАМИЧЕСКИЙ МАССИВ ОБЪЕКТОВ:" << endl;
     Projectile* projectileArray = new Projectile[2];
     for (int i = 0; i < 2; ++i) {
-        projectileArray[i].update();
+        projectileArray[i].Update();
     }
 
     // 15. Массив динамических объектов
@@ -99,27 +100,94 @@ int main() {
     Meteor* dynamicMeteors[2];
     for (int i = 0; i < 2; ++i) {
         dynamicMeteors[i] = new Meteor(50 + i * 10, 2, 3, 15);
-        dynamicMeteors[i]->move();
+        dynamicMeteors[i]->Move();
     }
 
     // 16. Работа с указателями и ссылками
     cout << "\n16. РАБОТА С УКАЗАТЕЛЯМИ И ССЫЛКАМИ:" << endl;
     Meteor* meteorPtr = new Meteor(90, 2, 5, 25);
     Meteor& meteorRef = *meteorPtr;
-    meteorRef.update();
-    meteorRef.draw();
+    meteorRef.Update();
+    meteorRef.Draw();
 
     // 17. Обновление состояния игры
     cout << "\n17. ОБНОВЛЕНИЕ СОСТОЯНИЯ ИГРЫ:" << endl;
-    gameManager->update();
-    gameManager->check_win_conditions();
+    gameManager->Update();
+    gameManager->CheckWinConditions();
 
     // 18. Отрисовка всех объектов
     cout << "\n18. ОТРИСОВКА ОБЪЕКТОВ:" << endl;
-    castle->draw();
-    player->draw();
-    meteor1->draw();
-    boss->draw();
+    castle->Draw();
+    player->Draw();
+    meteor1->Draw();
+    boss->Draw();
+
+    // Демонстрация работы со строками
+    cout << "\n=== РАБОТА СО СТРОКАМИ ===" << endl;
+
+    // Конкатенация
+    string gameTitle = "Flying";
+    string gameSubtitle = "Danger";
+    string fullTitle = gameTitle + " " + gameSubtitle + " v2.0";
+    cout << "Название игры: " << fullTitle << endl;
+
+    // Поиск в строках
+    if (fullTitle.find("Danger") != string::npos) {
+        cout << "Игра содержит слово 'Danger'" << endl;
+    }
+
+    // Использование строковых методов класса
+    castle->SetPosition("center");
+    string castleStatus = "Замок: Здоровье " + to_string(castle->GetHealth()) + "/" + to_string(castle->GetMaxHealth());
+    cout << castleStatus << endl;
+
+    // Демонстрация перегрузки операторов
+    cout << "\n=== ПЕРЕГРУЗКА ОПЕРАТОРОВ ===" << endl;
+
+    // Оператор - для замка
+    cout << "1. ОПЕРАТОР - ДЛЯ ЗАМКА:" << endl;
+    cout << castle->GetHealth() << endl;
+    *castle - 25;  // Замок получает 25 урона
+    cout << castle->GetHealth() << endl;
+
+    // Оператор == для снарядов (проверка лимита)
+    cout << "\n2. ОПЕРАТОР == ДЛЯ СНАРЯДОВ (ЛИМИТ 5):" << endl;
+    vector<Projectile*> testProjectiles;
+    for (int i = 0; i < 7; i++) {
+        Projectile* testProj = new Projectile();
+        if (*testProj == *testProj) {  // Проверка лимита
+            testProjectiles.push_back(testProj);
+            cout << "Снаряд " << (i + 1) << " создан успешно" << endl;
+        }
+        else {
+            cout << "Нельзя создать снаряд " << (i + 1) << " - превышен лимит!" << endl;
+            delete testProj;
+            break;
+        }
+    }
+
+    // Оператор << для босса (уменьшение размера)
+    cout << "\n3. ОПЕРАТОР << ДЛЯ БОССА:" << endl;
+    cout << "Начальный размер босса: " << boss->GetSize() << endl;
+    cout << *boss << endl;  // Уменьшает размер при выводе
+    cout << "Размер после вывода: " << boss->GetSize() << endl;
+
+    // Оператор + для игрока (добавление очков)
+    cout << "\n4. ОПЕРАТОР + ДЛЯ ИГРОКА:" << endl;
+    cout << player->GetPlayerInfo() << endl;
+    Meteor* smallMeteor = new Meteor(50, 2, 2, 10);  // Маленький метеор (размер 2)
+    *player + smallMeteor;  // +1 очко за маленький метеор
+    cout << player->GetPlayerInfo() << endl;
+
+    // Демонстрация конструкторов копирования
+    cout << "\n=== КОНСТРУКТОРЫ КОПИРОВАНИЯ ===" << endl;
+    Boss bossCopy(*boss);
+    Castle castleCopy(*castle);
+
+    // Демонстрация дружественных функций
+    cout << "\n=== ДРУЖЕСТВЕННЫЕ ФУНКЦИИ ===" << endl;
+    AnalyzeBoss(*boss);
+    RepairCastle(*castle, 50);
 
     // 19. Уничтожение объектов (обратный порядок создания)
     cout << "\n19. УНИЧТОЖЕНИЕ ОБЪЕКТОВ:" << endl;
@@ -133,8 +201,14 @@ int main() {
 
     // Очистка отдельных объектов
     delete meteorPtr;
+    delete smallMeteor;
     delete projectile1;
     delete projectile2;
+
+    // Очистка тестовых снарядов
+    for (auto proj : testProjectiles) {
+        delete proj;
+    }
 
     // Очистка основных объектов (автоматически удалит связанные)
     delete gameManager;

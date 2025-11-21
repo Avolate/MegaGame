@@ -140,6 +140,7 @@
     <ClInclude Include="Boss.hpp" />
     <ClInclude Include="Castle.hpp" />
     <ClInclude Include="Enemy.hpp" />
+    <ClInclude Include="ForwardDeclarations.hpp" />
     <ClInclude Include="GameManager.hpp" />
     <ClInclude Include="Meteor.hpp" />
     <ClInclude Include="Player.hpp" />
