@@ -42,10 +42,29 @@ void GameManager::HandleEvents() {
     cout << "Метод handle_events() класса GameManager выполнен" << endl;
 }
 
+// Обработка исключений (Try-Catch-Throw)
 void GameManager::AddEnemy(Enemy* enemy) {
-    enemies.push_back(enemy);
-    cout << "Враг добавлен в GameManager" << endl;
+    try {
+        if (enemy == nullptr) {
+            throw runtime_error("Ошибка: попытка добавить nullptr врага!");
+        }
+        if (enemies.size() >= 10) {
+            throw out_of_range("Ошибка: превышено максимальное количество врагов (10)!");
+        }
+        enemies.push_back(enemy);
+        cout << "Враг успешно добавлен в игру" << endl;
+    }
+    catch (const runtime_error& e) {
+        cout << "Исключение (runtime_error): " << e.what() << endl;
+    }
+    catch (const out_of_range& e) {
+        cout << "Исключение (out_of_range): " << e.what() << endl;
+    }
+    catch (...) {
+        cout << "Неизвестное исключение при добавлении врага!" << endl;
+    }
 }
+
 
 void GameManager::RemoveEnemy(Enemy* enemy) {
     // Поиск и удаление врага из вектора

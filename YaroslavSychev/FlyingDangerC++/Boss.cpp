@@ -1,6 +1,10 @@
 ﻿#include "Boss.hpp"
 #include "GameManager.hpp"
 
+// Инициализация статических полей
+const int Boss::MAX_BOSS_HEALTH = 1000;
+bool Boss::bossCreated = false;
+
 int firstPhase = 1;
 int currentPhase = 1;
 int defaultBossSize = 10;
@@ -76,12 +80,12 @@ void Boss::ApplyDamage(int amount) {
 }
 
 void Boss::ChangePhase() {
-    phase++;
+    this->phase++;
     cout << "Босс перешел в фазу " << phase << "!" << endl;
     cout << "Скорость и урон увеличены!" << endl;
 
-    speed += dopSpeed;
-    damage += dopDamage;
+    this->speed += dopSpeed;
+    this->damage += dopDamage;
 }
 
 // Перегрузка оператора << для уменьшения размера при получении урона

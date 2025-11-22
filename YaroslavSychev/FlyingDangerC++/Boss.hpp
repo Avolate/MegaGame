@@ -9,11 +9,11 @@ private:
     int phase;
     int size;
     int damage;
-    // —татическое поле - счетчик всех созданных боссов
-    static int totalBossCount;
+    // —татическое поле - максимальное здоровье босса дл€ всей игры
+    static const int MAX_BOSS_HEALTH;
 
-    // —татическое поле - максимально допустимое здоровье босса
-    static const int MAX_BOSS_HEALTH = 1000;
+    // —татическое поле - флаг, был ли босс уже создан (только один босс в игре)
+    static bool bossCreated;
 
 public:
     Boss();
@@ -30,15 +30,14 @@ public:
     void ApplyDamage(int amount);
     void ChangePhase();
 
-    // ƒемонстраци€ разумного использовани€ this
+    // ћетод с использованием this дл€ цепочки вызовов
     Boss* SetPhase(int newPhase);
-    Boss* SetSize(int newSize);
+
+    // —татический метод дл€ проверки возможности создани€ босса
+    static bool CanCreateBoss();
 
     // ƒружественна€ функци€ дл€ анализа босса
     friend void AnalyzeBoss(const Boss& boss);
-
-    // —татический метод - проверка допустимости здоровь€
-    static bool IsValidHealth(int health);
 
     // ѕерегрузка оператора << дл€ уменьшени€ размера при получении урона
     friend ostream& operator<<(ostream& os, Boss& boss);

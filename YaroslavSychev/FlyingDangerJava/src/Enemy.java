@@ -6,7 +6,7 @@ public abstract class Enemy {
     protected String sprite;
     protected String rect;
     protected GameManager gameManager;
-
+    private static int totalEnemiesCreated = 0;
     // Константы
     public static final int DEFAULT_HEALTH = 50;
     public static final int DEFAULT_MAX_HEALTH = 50;
@@ -21,9 +21,17 @@ public abstract class Enemy {
         this.sprite = "";
         this.rect = "";
         this.gameManager = null;
-        System.out.println("Объект класса Enemy создан");
+        totalEnemiesCreated++;
+        System.out.println("Объект класса Enemy создан. Всего врагов: " + totalEnemiesCreated);
+    }
+    // статический метод
+    public static int getTotalEnemiesCreated() {
+        return totalEnemiesCreated;
     }
 
+    public static String getGameInfo() {
+        return "Всего создано врагов: " + totalEnemiesCreated;
+    }
     public Enemy(int hp, int spd) {
         this();
         this.health = hp;

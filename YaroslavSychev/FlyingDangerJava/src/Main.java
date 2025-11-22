@@ -59,6 +59,8 @@ public class Main {
         gameManager.addEnemy(meteor2);
         gameManager.addEnemy(boss);
 
+        System.out.println(Enemy.getGameInfo());  // Использование статического метода
+
         // 6. Действия игрока
         System.out.println("\n6. ДЕЙСТВИЯ ИГРОКА:");
         player.move(PLAYER_POSITION_X + "," + PLAYER_POSITION_Y);
@@ -123,7 +125,7 @@ public class Main {
             dynamicMeteors[i] = new Meteor(50 + i * 10, 2, 3, 15, gameManager);
             dynamicMeteors[i].move();
         }
-
+        System.out.println("\nИТОГО СОЗДАНО ВРАГОВ: " + Enemy.getTotalEnemiesCreated());
         System.out.println("\nКОНЕЦ ДЕМОНСТРАЦИИ!");
 
         System.out.println("Для выхода нажмите Enter...");
