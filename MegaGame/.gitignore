@@ -1,0 +1,25 @@
+# Visual Studio
+.vs/
+Debug/
+Release/
+x64/
+x86/
+*.vcxproj.user
+*.sln.DotSettings
+
+# Build artifacts
+*.obj
+*.exe
+*.pdb
+*.ilk
+
+# External libraries
+External/
+
+# IDE
+.vscode/
+*.code-workspace
+
+# OS
+.DS_Store
+Thumbs.db
