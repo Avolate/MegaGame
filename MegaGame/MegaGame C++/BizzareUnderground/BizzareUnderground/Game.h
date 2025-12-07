@@ -3,6 +3,7 @@
 #include <vector>
 #include "Player.h"
 #include "Ground.h"
+#include "Spike.h"
 
 class Game
 {
@@ -10,6 +11,7 @@ private:
     sf::RenderWindow window;
     Player player;
     std::vector<Ground> grounds;
+    std::vector<Spike> spikes;
     sf::Clock gameClock;
 
     // Параметры окна

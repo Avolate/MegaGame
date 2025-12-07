@@ -23,6 +23,13 @@ void Game::initializeLevel()
     // Платформы выше
     grounds.emplace_back(100.0f, 400.0f, 200.0f, 40.0f);
     grounds.emplace_back(900.0f, 400.0f, 200.0f, 40.0f);
+
+    // Добавляем шипы (размер 40x40)
+    spikes.emplace_back(350.0f, 660.0f, 40.0f);  // Левый нижний шип
+    spikes.emplace_back(800.0f, 660.0f, 40.0f);  // Правый нижний шип
+    spikes.emplace_back(250.0f, 510.0f, 40.0f);  // Левый средний шип
+    spikes.emplace_back(900.0f, 510.0f, 40.0f);  // Правый средний шип
+    spikes.emplace_back(500.0f, 360.0f, 40.0f);  // Центральный верхний шип
 }
 
 void Game::handleEvents()
@@ -57,6 +64,7 @@ void Game::checkCollisions()
     sf::FloatRect playerBounds = player.getBounds();
     bool isColliding = false;
 
+    // Проверка столкновения с платформами
     for (const auto& ground : grounds)
     {
         sf::FloatRect groundBounds = ground.getBounds();
@@ -82,6 +90,16 @@ void Game::checkCollisions()
     {
         player.setOnGround(false);
     }
+
+    // Проверка столкновения с шипами (смерть)
+    for (const auto& spike : spikes)
+    {
+        if (playerBounds.intersects(spike.getBounds()))
+        {
+            player.respawn();
+            return;  // Выходим, чтобы не проверять остальные шипы
+        }
+    }
 }
 
 void Game::render()
@@ -92,6 +110,12 @@ void Game::render()
     for (auto& ground : grounds)
     {
         ground.draw(window);
+    }
+
+    // Рисуем все шипы
+    for (auto& spike : spikes)
+    {
+        spike.draw(window);
     }
 
     // Рисуем игрока

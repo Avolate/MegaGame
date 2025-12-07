@@ -2,7 +2,8 @@
 
 Player::Player(float startX, float startY)
     : moveSpeed(300.0f), jumpForce(500.0f), gravity(1000.0f),
-    maxFallSpeed(1000.0f), isOnGround(false), groundY(startY)
+    maxFallSpeed(1000.0f), isOnGround(false), groundY(startY),
+    startX(startX), startY(startY)
 {
     // Инициализация тела персонажа
     body.setSize(sf::Vector2f(40.0f, 60.0f));
@@ -69,9 +70,8 @@ void Player::update(float deltaTime)
     // Если персонаж упал ниже экрана, возвращаем его на начальную позицию
     if (newPos.y > 800)
     {
-        newPos.x = 100;
-        newPos.y = 200;
-        velocity.y = 0;
+        respawn();
+        return;
     }
 
     body.setPosition(newPos);
@@ -100,4 +100,11 @@ void Player::setOnGround(bool grounded)
 void Player::setGroundY(float y)
 {
     groundY = y;
+}
+
+void Player::respawn()
+{
+    body.setPosition(startX, startY);
+    velocity = sf::Vector2f(0.0f, 0.0f);
+    isOnGround = false;
 }
