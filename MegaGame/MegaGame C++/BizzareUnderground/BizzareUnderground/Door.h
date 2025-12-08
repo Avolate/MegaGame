@@ -1,14 +1,19 @@
 #pragma once
 #include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
 
-class Spike
+class Door
 {
 private:
-    sf::ConvexShape triangle;  // Треугольник для спайка
+    sf::RectangleShape shape;
+    bool isOpen;  // Открыта ли дверь
 
 public:
-    Spike(float x, float y, float size);
+    Door(float x, float y);
     
     void draw(sf::RenderWindow& window);
     sf::FloatRect getBounds() const;
+    
+    bool getIsOpen() const;
+    void open();
+    void close();
 };

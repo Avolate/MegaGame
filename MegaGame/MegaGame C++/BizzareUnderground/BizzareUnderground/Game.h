@@ -4,6 +4,8 @@
 #include "Player.h"
 #include "Ground.h"
 #include "Spike.h"
+#include "Key.h"
+#include "Door.h"
 
 class Game
 {
@@ -12,7 +14,10 @@ private:
     Player player;
     std::vector<Ground> grounds;
     std::vector<Spike> spikes;
-    sf::Clock gameClock;
+    std::vector<Key> keys;
+    Door door;
+
+    int keysCollected;  // Количество собранных ключей
 
     // Параметры окна
     const float WINDOW_WIDTH = 1200.0f;
@@ -26,6 +31,7 @@ public:
     void update();
     void render();
     void checkCollisions();
+    void resetLevel();
 
     void run();
     bool isRunning() const;

@@ -1,14 +1,18 @@
 #pragma once
 #include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
 
-class Spike
+class Key
 {
 private:
-    sf::ConvexShape triangle;  // Треугольник для спайка
+    sf::RectangleShape shape;
+    bool collected;  // Собран ли ключ
 
 public:
-    Spike(float x, float y, float size);
+    Key(float x, float y);
     
     void draw(sf::RenderWindow& window);
     sf::FloatRect getBounds() const;
+    
+    bool isCollected() const;
+    void collect();
 };
