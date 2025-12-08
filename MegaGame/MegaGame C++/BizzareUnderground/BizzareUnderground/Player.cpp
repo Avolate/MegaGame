@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(float startX, float startY)
-    : moveSpeed(300.0f), jumpForce(500.0f), gravity(1000.0f),
+    : moveSpeed(300.0f), jumpForce(700.0f), gravity(1000.0f),
     maxFallSpeed(1000.0f), isOnGround(false), groundY(startY),
     startX(startX), startY(startY)
 {
@@ -100,6 +100,21 @@ void Player::setOnGround(bool grounded)
 void Player::setGroundY(float y)
 {
     groundY = y;
+}
+
+void Player::setPosition(float x, float y)
+{
+    body.setPosition(x, y);
+}
+
+void Player::stopVerticalVelocity()
+{
+    velocity.y = 0.0f;
+}
+
+void Player::stopHorizontalVelocity()
+{
+    velocity.x = 0.0f;
 }
 
 void Player::respawn()

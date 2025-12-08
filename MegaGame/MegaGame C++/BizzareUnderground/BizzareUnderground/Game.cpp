@@ -84,14 +84,51 @@ void Game::checkCollisions()
         // Проверяем пересечение
         if (playerBounds.intersects(groundBounds))
         {
-            // Проверяем, падает ли персонаж сверху
-            float playerBottomOld = playerBounds.top + playerBounds.height;
-            float groundTop = groundBounds.top;
+            // Вычисляем глубину пересечения с каждой стороны
+            float overlapLeft = (playerBounds.left + playerBounds.width) - groundBounds.left;
+            float overlapRight = (groundBounds.left + groundBounds.width) - playerBounds.left;
+            float overlapTop = (playerBounds.top + playerBounds.height) - groundBounds.top;
+            float overlapBottom = (groundBounds.top + groundBounds.height) - playerBounds.top;
 
-            // Если персонаж был выше и пересекается, то он приземляется
-            if (playerBottomOld <= groundTop + 10.0f)
+            float minOverlap = std::min(std::min(overlapLeft, overlapRight),
+                std::min(overlapTop, overlapBottom));
+
+            // СТОЛКНОВЕНИЕ СВЕРХУ (игрок стоит на платформе)
+            if (minOverlap == overlapTop &&
+                playerBounds.top + playerBounds.height / 2.0f < groundBounds.top)
             {
+                player.stopVerticalVelocity();
+                player.setPosition(playerBounds.left,
+                    groundBounds.top - playerBounds.height);
                 player.setOnGround(true);
+                isColliding = true;
+                break;
+            }
+            // СТОЛКНОВЕНИЕ СНИЗУ (прыжок в потолок)
+            else if (minOverlap == overlapBottom)
+            {
+                player.stopVerticalVelocity();
+                player.setPosition(playerBounds.left,
+                    groundBounds.top + groundBounds.height);
+                player.setOnGround(false);
+                isColliding = true;
+                break;
+            }
+            // СТОЛКНОВЕНИЕ СЛЕВА
+            else if (minOverlap == overlapLeft)
+            {
+                player.stopHorizontalVelocity();
+                player.setPosition(groundBounds.left - playerBounds.width,
+                    playerBounds.top);
+                isColliding = true;
+                break;
+            }
+            // СТОЛКНОВЕНИЕ СПРАВА
+            else if (minOverlap == overlapRight)
+            {
+                player.stopHorizontalVelocity();
+                player.setPosition(groundBounds.left + groundBounds.width,
+                    playerBounds.top);
                 isColliding = true;
                 break;
             }
@@ -108,6 +145,7 @@ void Game::checkCollisions()
     {
         if (playerBounds.intersects(spike.getBounds()))
         {
+            resetKeysAndDoor();
             player.respawn();
             return;
         }
@@ -132,9 +170,19 @@ void Game::checkCollisions()
     // Проверка столкновения с дверью (переход на новый уровень)
     if (door.getIsOpen() && playerBounds.intersects(door.getBounds()))
     {
-        // Начинаем уровень заново
         resetLevel();
     }
+}
+
+void Game::resetKeysAndDoor()
+{
+    keysCollected = 0;
+    door.close();
+
+    keys.clear();
+    keys.emplace_back(150.0f, 350.0f);
+    keys.emplace_back(950.0f, 350.0f);
+    keys.emplace_back(600.0f, 500.0f);
 }
 
 void Game::resetLevel()
@@ -147,28 +195,16 @@ void Game::render()
 {
     window.clear(sf::Color::Black);
 
-    // Рисуем все платформы
     for (auto& ground : grounds)
-    {
         ground.draw(window);
-    }
 
-    // Рисуем все шипы
     for (auto& spike : spikes)
-    {
         spike.draw(window);
-    }
 
-    // Рисуем все ключи
     for (auto& key : keys)
-    {
         key.draw(window);
-    }
 
-    // Рисуем дверь
     door.draw(window);
-
-    // Рисуем игрока
     player.draw(window);
 
     window.display();

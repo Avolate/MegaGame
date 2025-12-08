@@ -37,6 +37,11 @@ public:
     void setOnGround(bool grounded);
     void setGroundY(float y);
 
+    // Методы для коррекции позиции при столкновении
+    void setPosition(float x, float y);
+    void stopVerticalVelocity();
+    void stopHorizontalVelocity();
+
     // Respawn при смерти
     void respawn();
 };

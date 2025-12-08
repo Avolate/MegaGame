@@ -16,6 +16,7 @@ private:
     std::vector<Spike> spikes;
     std::vector<Key> keys;
     Door door;
+    sf::Clock gameClock;  // Добавляем часы для deltaTime
 
     int keysCollected;  // Количество собранных ключей
 
@@ -32,6 +33,7 @@ public:
     void render();
     void checkCollisions();
     void resetLevel();
+    void resetKeysAndDoor();  // НОВЫЙ МЕТОД
 
     void run();
     bool isRunning() const;
