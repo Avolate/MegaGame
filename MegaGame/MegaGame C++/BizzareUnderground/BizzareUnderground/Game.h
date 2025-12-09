@@ -7,6 +7,7 @@
 #include "Key.h"
 #include "Door.h"
 #include "Box.h"
+#include "Button.h"
 
 class Game
 {
@@ -14,6 +15,7 @@ private:
     sf::RenderWindow window;
     Player player;
     Box box;
+    Button button;
     std::vector<Ground> grounds;
     std::vector<Spike> spikes;
     std::vector<Key> keys;
@@ -21,6 +23,7 @@ private:
     sf::Clock gameClock;
 
     int keysCollected;
+    bool isRightSpikeActive;  // Флаг для управления правым нижним шипом
 
     const float WINDOW_WIDTH = 1200.0f;
     const float WINDOW_HEIGHT = 800.0f;
