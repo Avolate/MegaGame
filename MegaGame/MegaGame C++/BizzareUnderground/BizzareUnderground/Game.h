@@ -6,21 +6,25 @@
 #include "Spike.h"
 #include "Key.h"
 #include "Door.h"
+#include "Box.h"
+#include "Button.h"
 
 class Game
 {
 private:
     sf::RenderWindow window;
     Player player;
+    Box box;
+    Button button;
     std::vector<Ground> grounds;
     std::vector<Spike> spikes;
     std::vector<Key> keys;
     Door door;
-    sf::Clock gameClock;  // Добавляем часы для deltaTime
+    sf::Clock gameClock;
 
-    int keysCollected;  // Количество собранных ключей
+    int keysCollected;
+    bool isRightSpikeActive;  // Флаг для управления правым нижним шипом
 
-    // Параметры окна
     const float WINDOW_WIDTH = 1200.0f;
     const float WINDOW_HEIGHT = 800.0f;
 
@@ -33,7 +37,7 @@ public:
     void render();
     void checkCollisions();
     void resetLevel();
-    void resetKeysAndDoor();  // НОВЫЙ МЕТОД
+    void resetKeysAndDoor();
 
     void run();
     bool isRunning() const;
