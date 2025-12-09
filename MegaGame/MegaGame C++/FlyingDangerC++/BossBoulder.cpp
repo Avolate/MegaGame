@@ -15,12 +15,15 @@ BossBoulder::BossBoulder() : GameObject(), health(5)
 
 void BossBoulder::update(float deltaTime)
 {
-    // TODO: реализовать логику движения
     x += velocityX * deltaTime;
     shape.setPosition(x, y);
+
+    if (x < -130.0f)
+        isActive = false;
 }
 
 void BossBoulder::draw(sf::RenderWindow& window)
 {
-    window.draw(shape);
+    if (isActive)
+        window.draw(shape);
 }

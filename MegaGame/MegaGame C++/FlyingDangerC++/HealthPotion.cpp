@@ -1,5 +1,5 @@
 #include "HealthPotion.h"
-#include <stdlib.h>
+#include <cstdlib>
 
 HealthPotion::HealthPotion() : GameObject()
 {
@@ -10,18 +10,21 @@ HealthPotion::HealthPotion() : GameObject()
     isActive = true;
 
     shape.setRadius(15.0f);
-    shape.setFillColor(sf::Color::Magenta);
+    shape.setFillColor(sf::Color::Green);
     shape.setPosition(x, y);
 }
 
 void HealthPotion::update(float deltaTime)
 {
-    // TODO: реализовать логику движения
     x += velocityX * deltaTime;
     shape.setPosition(x, y);
+
+    if (x < -50.0f)
+        isActive = false;
 }
 
 void HealthPotion::draw(sf::RenderWindow& window)
 {
-    window.draw(shape);
+    if (isActive)
+        window.draw(shape);
 }

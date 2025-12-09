@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <ctime>
 #include "Archer.h"
 #include "Boulder.h"
 #include "BossBoulder.h"
@@ -29,11 +30,12 @@ private:
     void handleInput();
     void update(float deltaTime);
     void render();
+    void spawnBoulder();
+    void drawHUD();
 
     sf::RenderWindow window;
     GameState currentState;
 
-    // Игровые объекты
     Archer* archer;
     Castle* castle;
 
@@ -48,6 +50,12 @@ private:
     int archerHealth;
     int castleHealth;
 
-    // Время
+    // Время и спавнинг
     sf::Clock clock;
+    sf::Clock spawnTimer;
+    float spawnInterval;
+    int bouldersOnScreen;
+
+    // Шрифт для HUD
+    sf::Font font;
 };

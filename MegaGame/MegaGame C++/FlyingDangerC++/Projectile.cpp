@@ -4,7 +4,7 @@ Projectile::Projectile(float startX, float startY) : GameObject()
 {
     x = startX;
     y = startY;
-    velocityX = 400.0f;  // Летит вправо
+    velocityX = 400.0f;
     velocityY = 0.0f;
     isActive = true;
 
@@ -15,12 +15,15 @@ Projectile::Projectile(float startX, float startY) : GameObject()
 
 void Projectile::update(float deltaTime)
 {
-    // TODO: реализовать логику движения
     x += velocityX * deltaTime;
     shape.setPosition(x, y);
+
+    if (x > 850.0f)
+        isActive = false;
 }
 
 void Projectile::draw(sf::RenderWindow& window)
 {
-    window.draw(shape);
+    if (isActive)
+        window.draw(shape);
 }

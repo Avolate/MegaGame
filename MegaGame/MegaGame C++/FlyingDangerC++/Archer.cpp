@@ -15,7 +15,8 @@ Archer::Archer() : GameObject()
 
 void Archer::update(float deltaTime)
 {
-    // TODO: реализовать логику
+    // TODO: управление мышью будет в v0.3
+    // ѕока просто отрисовываем на месте
     shape.setPosition(x, y);
 }
 

@@ -15,7 +15,7 @@ Castle::Castle() : GameObject(), health(3)
 
 void Castle::update(float deltaTime)
 {
-    // TODO: добавить логику
+    // Замок статичен
 }
 
 void Castle::draw(sf::RenderWindow& window)

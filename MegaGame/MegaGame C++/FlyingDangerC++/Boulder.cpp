@@ -1,12 +1,11 @@
 #include "Boulder.h"
-#include <stdlib.h>
-#include <time.h>
+#include <cstdlib>
 
 Boulder::Boulder() : GameObject()
 {
     x = 750.0f;
     y = static_cast<float>(rand() % 550);
-    velocityX = -150.0f - (rand() % 100);
+    velocityX = -150.0f - (rand() % 100);  // -150 до -250
     velocityY = 0.0f;
     isActive = true;
 
@@ -17,12 +16,16 @@ Boulder::Boulder() : GameObject()
 
 void Boulder::update(float deltaTime)
 {
-    // TODO: реализовать логику движения
     x += velocityX * deltaTime;
     shape.setPosition(x, y);
+
+    // Удаляем, если вышёл за экран влево
+    if (x < -50.0f)
+        isActive = false;
 }
 
 void Boulder::draw(sf::RenderWindow& window)
 {
-    window.draw(shape);
+    if (isActive)
+        window.draw(shape);
 }
