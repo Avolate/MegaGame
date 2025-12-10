@@ -3,7 +3,7 @@
 Player::Player(float x, float y, float spd, int maxHp, sf::Texture& playerTex)
     : position(x, y), speed(spd), health(maxHp), maxHealth(maxHp) {
     sprite.setTexture(playerTex);
-    sprite.setScale(0.246f, 0.244f);  // 80×128
+    sprite.setScale(0.308f, 0.305f);  // 100×160 (было 80×128)
     sprite.setPosition(position);
 }
 

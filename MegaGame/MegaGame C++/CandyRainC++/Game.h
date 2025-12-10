@@ -35,6 +35,7 @@ private:
     void checkCollisions();
     void updateUI();
     void resetGame();
+    float getRandomFallSpeed();
 
 public:
     Game();

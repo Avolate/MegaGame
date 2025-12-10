@@ -2,7 +2,7 @@
 #include <iostream>
 
 const int WINDOW_WIDTH = 1500;
-const int WINDOW_HEIGHT = 800;
+const int WINDOW_HEIGHT = 1000;
 const float SPAWN_INTERVAL = 0.8f;
 
 Game::Game()
@@ -13,28 +13,52 @@ Game::Game()
 
     loadTextures();
 
-    player = std::make_unique<Player>(WINDOW_WIDTH / 2.0f - 40,
-        WINDOW_HEIGHT - 150, 500.0f, health, playerTex);
+    player = std::make_unique<Player>(WINDOW_WIDTH / 2.0f - 50,
+        WINDOW_HEIGHT - 180, 600.0f, health, playerTex);
 
-    if (!font.loadFromFile("assets/arial.ttf")) {
-        std::cerr << "Error loading font!" << std::endl;
+    // Пробуем несколько путей к шрифту
+    bool fontLoaded = false;
+
+    if (font.loadFromFile("assets/arial.ttf")) {
+        fontLoaded = true;
+        std::cout << "Font loaded from assets/arial.ttf" << std::endl;
+    }
+    else if (font.loadFromFile("arial.ttf")) {
+        fontLoaded = true;
+        std::cout << "Font loaded from arial.ttf" << std::endl;
+    }
+    else if (font.loadFromFile("C:/Windows/Fonts/arial.ttf")) {
+        fontLoaded = true;
+        std::cout << "Font loaded from C:/Windows/Fonts/arial.ttf" << std::endl;
+    }
+    else {
+        std::cerr << "Error: Could not load font from any path!" << std::endl;
+        std::cerr << "Tried: assets/arial.ttf, arial.ttf, C:/Windows/Fonts/arial.ttf" << std::endl;
     }
 
-    scoreText.setFont(font);
-    scoreText.setCharacterSize(28);
-    scoreText.setFillColor(sf::Color::White);
-    scoreText.setPosition(20, 20);
+    if (fontLoaded) {
+        scoreText.setFont(font);
+        scoreText.setCharacterSize(52);
+        scoreText.setFillColor(sf::Color::Yellow);
+        scoreText.setOutlineThickness(2.5f);
+        scoreText.setOutlineColor(sf::Color::Black);
+        scoreText.setPosition(30, 30);
 
-    healthText.setFont(font);
-    healthText.setCharacterSize(28);
-    healthText.setFillColor(sf::Color::Red);
-    healthText.setPosition(20, 60);
+        healthText.setFont(font);
+        healthText.setCharacterSize(52);
+        healthText.setFillColor(sf::Color::Red);
+        healthText.setOutlineThickness(2.5f);
+        healthText.setOutlineColor(sf::Color::Black);
+        healthText.setPosition(30, 110);
 
-    gameOverText.setFont(font);
-    gameOverText.setCharacterSize(72);
-    gameOverText.setFillColor(sf::Color::Red);
-    gameOverText.setPosition(WINDOW_WIDTH / 2 - 250, WINDOW_HEIGHT / 2 - 100);
-    gameOverText.setString("GAME OVER!");
+        gameOverText.setFont(font);
+        gameOverText.setCharacterSize(120);
+        gameOverText.setFillColor(sf::Color::Red);
+        gameOverText.setOutlineThickness(5.f);
+        gameOverText.setOutlineColor(sf::Color::White);
+        gameOverText.setPosition(WINDOW_WIDTH / 2 - 450, WINDOW_HEIGHT / 2 - 150);
+        gameOverText.setString("GAME OVER!");
+    }
 }
 
 Game::~Game() {
@@ -71,29 +95,36 @@ void Game::loadTextures() {
         static_cast<float>(WINDOW_HEIGHT) / 183.0f);
 }
 
+float Game::getRandomFallSpeed() {
+    // Рандомная скорость падения от 150 до 350 пикселей в секунду
+    std::uniform_real_distribution<> speedDist(150.0, 350.0);
+    return static_cast<float>(speedDist(rng));
+}
+
 void Game::spawnObject() {
-    std::uniform_int_distribution<> xDist(50, WINDOW_WIDTH - 150);
+    std::uniform_int_distribution<> xDist(60, WINDOW_WIDTH - 180);
     std::uniform_int_distribution<> typeDist(0, 10);
 
     int x = xDist(rng);
     int type = typeDist(rng);
+    float randomSpeed = getRandomFallSpeed();
 
     if (type < 6) {
         // Сладости (60% шанс)
         fallingObjects.push_back(std::make_unique<Sweet>(
-            static_cast<float>(x), -100, 200.0f, candyTex, donutTex, lollipopTex, cakeTex
+            static_cast<float>(x), -150, randomSpeed, candyTex, donutTex, lollipopTex, cakeTex
         ));
     }
     else if (type < 9) {
         // Мусор (30% шанс)
         fallingObjects.push_back(std::make_unique<Trash>(
-            static_cast<float>(x), -150, 250.0f, trashTex
+            static_cast<float>(x), -200, randomSpeed, trashTex
         ));
     }
     else {
         // Сердца (10% шанс)
         fallingObjects.push_back(std::make_unique<Heart>(
-            static_cast<float>(x), -100, 180.0f, heartTex
+            static_cast<float>(x), -150, randomSpeed, heartTex
         ));
     }
 }
@@ -142,8 +173,8 @@ void Game::resetGame() {
     score = 0;
     gameOver = false;
     fallingObjects.clear();
-    player = std::make_unique<Player>(WINDOW_WIDTH / 2.0f - 40,
-        WINDOW_HEIGHT - 150, 500.0f, 5, playerTex);
+    player = std::make_unique<Player>(WINDOW_WIDTH / 2.0f - 50,
+        WINDOW_HEIGHT - 180, 600.0f, 5, playerTex);
 }
 
 void Game::run() {

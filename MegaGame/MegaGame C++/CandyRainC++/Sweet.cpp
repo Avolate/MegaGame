@@ -10,22 +10,22 @@ Sweet::Sweet(float x, float y, float velocity, sf::Texture& candyTex,
     switch (type) {
     case SweetType::CANDY:
         sprite.setTexture(candyTex);
-        sprite.setScale(0.0267f, 0.0267f);  // 80×80
+        sprite.setScale(0.0367f, 0.0367f);  // 110×110 (было 80×80)
         points = 10;
         break;
     case SweetType::DONUT:
         sprite.setTexture(donutTex);
-        sprite.setScale(0.0235f, 0.0235f);  // 100×100
+        sprite.setScale(0.0282f, 0.0282f);  // 120×120 (было 100×100)
         points = 20;
         break;
     case SweetType::LOLLIPOP:
         sprite.setTexture(lollipopTex);
-        sprite.setScale(0.0267f, 0.0267f);  // 80×80
+        sprite.setScale(0.0367f, 0.0367f);  // 110×110 (было 80×80)
         points = 30;
         break;
     case SweetType::CAKE:
         sprite.setTexture(cakeTex);
-        sprite.setScale(0.0267f, 0.0267f);  // 80×80
+        sprite.setScale(0.0367f, 0.0367f);  // 110×110 (было 80×80)
         points = 25;
         break;
     }

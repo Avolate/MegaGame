@@ -3,7 +3,7 @@
 Trash::Trash(float x, float y, float velocity, sf::Texture& trashTex)
     : FallingObject(x, y, velocity), damage(1) {
     sprite.setTexture(trashTex);
-    sprite.setScale(0.0185f, 0.0185f);  // 120×120
+    sprite.setScale(0.0222f, 0.0222f);  // 145×145 (было 120×120)
     sprite.setPosition(position);
     bounds = sprite.getGlobalBounds();
 }
