@@ -2,28 +2,32 @@
 
 Projectile::Projectile(float startX, float startY) : GameObject()
 {
-    x = startX;
-    y = startY;
-    velocityX = 400.0f;
-    velocityY = 0.0f;
-    isActive = true;
+	x = startX;
+	y = startY;
+	velocityX = 800.0f;
+	velocityY = 0.0f;
+	isActive = true;
 
-    shape.setRadius(8.0f);
-    shape.setFillColor(sf::Color::Yellow);
-    shape.setPosition(x, y);
+	// Загружаем спрайт пули (laserred 24x7)
+	if (!texture.loadFromFile("assets/laserred.png"))
+	{
+		// Fallback
+	}
+	sprite.setTexture(texture);
+	sprite.setPosition(x, y);
 }
 
 void Projectile::update(float deltaTime)
 {
-    x += velocityX * deltaTime;
-    shape.setPosition(x, y);
+	x += velocityX * deltaTime;
+	sprite.setPosition(x, y);
 
-    if (x > 850.0f)
-        isActive = false;
+	if (x > 1600.0f)
+		isActive = false;
 }
 
 void Projectile::draw(sf::RenderWindow& window)
 {
-    if (isActive)
-        window.draw(shape);
+	if (isActive)
+		window.draw(sprite);
 }

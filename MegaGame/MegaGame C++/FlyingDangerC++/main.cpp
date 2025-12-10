@@ -3,8 +3,8 @@
 
 int main()
 {
-    GameManager game;
-    game.run();
+	GameManager game;
+	game.run();
 
-    return 0;
+	return 0;
 }

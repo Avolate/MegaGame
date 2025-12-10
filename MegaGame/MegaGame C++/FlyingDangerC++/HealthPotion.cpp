@@ -3,28 +3,32 @@
 
 HealthPotion::HealthPotion() : GameObject()
 {
-    x = 750.0f;
-    y = static_cast<float>(rand() % 550);
-    velocityX = -100.0f;
-    velocityY = 0.0f;
-    isActive = true;
+	x = 1500.0f;
+	y = static_cast<float>(rand() % (800 - 64));
+	velocityX = -150.0f;
+	velocityY = 0.0f;
+	isActive = true;
 
-    shape.setRadius(15.0f);
-    shape.setFillColor(sf::Color::Green);
-    shape.setPosition(x, y);
+	// «агружаем спрайт здоровь€ (stone3, используем stone)
+	if (!texture.loadFromFile("assets/stone.png"))
+	{
+		// Fallback
+	}
+	sprite.setTexture(texture);
+	sprite.setPosition(x, y);
 }
 
 void HealthPotion::update(float deltaTime)
 {
-    x += velocityX * deltaTime;
-    shape.setPosition(x, y);
+	x += velocityX * deltaTime;
+	sprite.setPosition(x, y);
 
-    if (x < -50.0f)
-        isActive = false;
+	if (x < -100.0f)
+		isActive = false;
 }
 
 void HealthPotion::draw(sf::RenderWindow& window)
 {
-    if (isActive)
-        window.draw(shape);
+	if (isActive)
+		window.draw(sprite);
 }

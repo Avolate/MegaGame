@@ -1,4 +1,5 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <ctime>
@@ -11,51 +12,58 @@
 
 enum class GameState
 {
-    MENU,
-    PLAYING,
-    PAUSED,
-    GAME_OVER,
-    WIN
+	MENU,
+	PLAYING,
+	PAUSED,
+	GAME_OVER,
+	WIN
 };
 
 class GameManager
 {
 public:
-    GameManager();
-    ~GameManager();
-
-    void run();
+	GameManager();
+	~GameManager();
+	void run();
 
 private:
-    void handleInput();
-    void update(float deltaTime);
-    void render();
-    void spawnBoulder();
-    void drawHUD();
+	void handleInput();
+	void update(float deltaTime);
+	void render();
+	void spawnBoulder();
+	void spawnBackground();
+	void drawHUD();
+	void checkCollisions();
 
-    sf::RenderWindow window;
-    GameState currentState;
+	sf::RenderWindow window;
+	GameState currentState;
 
-    Archer* archer;
-    Castle* castle;
+	Archer* archer;
+	Castle* castle;
+	std::vector<Boulder*> boulders;
+	std::vector<Projectile*> projectiles;
+	std::vector<HealthPotion*> healthPotions;
+	BossBoulder* bossBoulder;
 
-    std::vector<Boulder*> boulders;
-    std::vector<Projectile*> projectiles;
-    std::vector<HealthPotion*> healthPotions;
+	// Фоны
+	sf::Texture bgTexture1, bgTexture2;
+	sf::Sprite bgSprite1, bgSprite2;
+	float bgScrollX;
 
-    BossBoulder* bossBoulder;
+	// Счётчики
+	int score;
+	int archerHealth;
+	int castleHealth;
 
-    // Счётчики
-    int destroyedBoulders;
-    int archerHealth;
-    int castleHealth;
+	// Время и спавнинг
+	sf::Clock clock;
+	sf::Clock spawnTimer;
+	float spawnInterval;
+	int bouldersOnScreen;
 
-    // Время и спавнинг
-    sf::Clock clock;
-    sf::Clock spawnTimer;
-    float spawnInterval;
-    int bouldersOnScreen;
+	// Шрифт для HUD
+	sf::Font font;
 
-    // Шрифт для HUD
-    sf::Font font;
+	// Флаг для отслеживания активности босса
+	bool bossActive;
 };
