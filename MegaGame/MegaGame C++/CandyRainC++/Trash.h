@@ -1,5 +1,4 @@
-#ifndef TRASH_H
-#define TRASH_H
+#pragma once
 
 #include "FallingObject.h"
 
@@ -8,7 +7,7 @@ private:
     int damage;
 
 public:
-    Trash(float x, float y, float velocity);
+    Trash(float x, float y, float velocity, sf::Texture& trashTex);
     virtual ~Trash();
 
     void update(float deltaTime) override;
@@ -16,5 +15,3 @@ public:
 
     int getDamage() const;
 };
-
-#endif

@@ -1,18 +1,20 @@
-#include "Heart.h"
+п»ї#include "Heart.h"
 
-Heart::Heart(float x, float y, float velocity)
+Heart::Heart(float x, float y, float velocity, sf::Texture& heartTex)
     : FallingObject(x, y, velocity), healthRestore(1) {
-    // Здесь будет загрузка спрайта сердца
-    // sprite.setTexture(...);
+    sprite.setTexture(heartTex);
+    sprite.setScale(0.0140f, 0.0135f);  // 80Г—70
+    sprite.setPosition(position);
+    bounds = sprite.getGlobalBounds();
 }
 
 Heart::~Heart() {
 }
 
 void Heart::update(float deltaTime) {
-    // Падение вниз
     position.y += velocity * deltaTime;
     sprite.setPosition(position);
+    bounds = sprite.getGlobalBounds();
 }
 
 void Heart::draw(sf::RenderWindow& window) {

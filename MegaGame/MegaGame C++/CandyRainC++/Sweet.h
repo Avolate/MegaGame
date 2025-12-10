@@ -1,11 +1,11 @@
-#ifndef SWEET_H
-#define SWEET_H
+#pragma once
 
 #include "FallingObject.h"
 
 enum class SweetType {
     CANDY,
     DONUT,
+    LOLLIPOP,
     CAKE
 };
 
@@ -14,8 +14,11 @@ private:
     SweetType type;
     int points;
 
+    void randomizeType();
+
 public:
-    Sweet(float x, float y, float velocity);
+    Sweet(float x, float y, float velocity, sf::Texture& candyTex,
+        sf::Texture& donutTex, sf::Texture& lollipopTex, sf::Texture& cakeTex);
     virtual ~Sweet();
 
     void update(float deltaTime) override;
@@ -24,5 +27,3 @@ public:
     SweetType getType() const;
     int getPoints() const;
 };
-
-#endif

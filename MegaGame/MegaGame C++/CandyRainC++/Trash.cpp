@@ -1,18 +1,20 @@
-#include "Trash.h"
+п»ї#include "Trash.h"
 
-Trash::Trash(float x, float y, float velocity)
+Trash::Trash(float x, float y, float velocity, sf::Texture& trashTex)
     : FallingObject(x, y, velocity), damage(1) {
-    // Здесь будет загрузка спрайта мусора
-    // sprite.setTexture(...);
+    sprite.setTexture(trashTex);
+    sprite.setScale(0.0185f, 0.0185f);  // 120Г—120
+    sprite.setPosition(position);
+    bounds = sprite.getGlobalBounds();
 }
 
 Trash::~Trash() {
 }
 
 void Trash::update(float deltaTime) {
-    // Падение вниз
     position.y += velocity * deltaTime;
     sprite.setPosition(position);
+    bounds = sprite.getGlobalBounds();
 }
 
 void Trash::draw(sf::RenderWindow& window) {

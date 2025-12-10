@@ -1,38 +1,51 @@
-#include "Sweet.h"
+п»ї#include "Sweet.h"
 #include <cstdlib>
-#include <ctime>>
+#include <ctime>
 
-Sweet::Sweet(float x, float y, float velocity)
+Sweet::Sweet(float x, float y, float velocity, sf::Texture& candyTex,
+    sf::Texture& donutTex, sf::Texture& lollipopTex, sf::Texture& cakeTex)
     : FallingObject(x, y, velocity) {
-    // Случайный выбор типа сладости
-    srand(static_cast<unsigned>(time(0)));
-    int typeIndex = rand() % 3;
-    type = static_cast<SweetType>(typeIndex);
+    randomizeType();
 
-    // Установка очков в зависимости от типа
     switch (type) {
     case SweetType::CANDY:
+        sprite.setTexture(candyTex);
+        sprite.setScale(0.0267f, 0.0267f);  // 80Г—80
         points = 10;
         break;
     case SweetType::DONUT:
+        sprite.setTexture(donutTex);
+        sprite.setScale(0.0235f, 0.0235f);  // 100Г—100
         points = 20;
         break;
-    case SweetType::CAKE:
+    case SweetType::LOLLIPOP:
+        sprite.setTexture(lollipopTex);
+        sprite.setScale(0.0267f, 0.0267f);  // 80Г—80
         points = 30;
+        break;
+    case SweetType::CAKE:
+        sprite.setTexture(cakeTex);
+        sprite.setScale(0.0267f, 0.0267f);  // 80Г—80
+        points = 25;
         break;
     }
 
-    // Здесь будет загрузка спрайта в зависимости от типа
-    // sprite.setTexture(...);
+    sprite.setPosition(position);
+    bounds = sprite.getGlobalBounds();
 }
 
 Sweet::~Sweet() {
 }
 
+void Sweet::randomizeType() {
+    int typeIndex = rand() % 4;
+    type = static_cast<SweetType>(typeIndex);
+}
+
 void Sweet::update(float deltaTime) {
-    // Падение вниз
     position.y += velocity * deltaTime;
     sprite.setPosition(position);
+    bounds = sprite.getGlobalBounds();
 }
 
 void Sweet::draw(sf::RenderWindow& window) {

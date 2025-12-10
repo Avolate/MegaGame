@@ -1,5 +1,4 @@
-#ifndef FALLING_OBJECT_H
-#define FALLING_OBJECT_H
+#pragma once
 
 #include <SFML/Graphics.hpp>
 
@@ -9,6 +8,7 @@ protected:
     sf::Vector2f position;
     float velocity;
     bool isActive;
+    sf::FloatRect bounds;
 
 public:
     FallingObject(float x, float y, float vel);
@@ -21,6 +21,5 @@ public:
     void setPosition(float x, float y);
     bool getActive() const;
     void setActive(bool active);
+    sf::FloatRect getBounds() const;
 };
-
-#endif

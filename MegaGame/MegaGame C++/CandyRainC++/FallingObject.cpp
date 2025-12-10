@@ -10,6 +10,7 @@ FallingObject::~FallingObject() {
 void FallingObject::setPosition(float x, float y) {
     position = sf::Vector2f(x, y);
     sprite.setPosition(position);
+    bounds = sprite.getGlobalBounds();
 }
 
 sf::Vector2f FallingObject::getPosition() const {
@@ -22,4 +23,8 @@ bool FallingObject::getActive() const {
 
 void FallingObject::setActive(bool active) {
     isActive = active;
+}
+
+sf::FloatRect FallingObject::getBounds() const {
+    return sprite.getGlobalBounds();
 }

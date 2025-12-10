@@ -1,5 +1,4 @@
-#ifndef HEART_H
-#define HEART_H
+#pragma once
 
 #include "FallingObject.h"
 
@@ -8,7 +7,7 @@ private:
     int healthRestore;
 
 public:
-    Heart(float x, float y, float velocity);
+    Heart(float x, float y, float velocity, sf::Texture& heartTex);
     virtual ~Heart();
 
     void update(float deltaTime) override;
@@ -16,5 +15,3 @@ public:
 
     int getHealthRestore() const;
 };
-
-#endif
