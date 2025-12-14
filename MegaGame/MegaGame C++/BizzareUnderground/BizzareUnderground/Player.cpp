@@ -1,7 +1,7 @@
 #include "Player.h"
 
 Player::Player(float startX, float startY)
-    : moveSpeed(300.0f), jumpForce(700.0f), gravity(1000.0f),
+    : moveSpeed(250.0f), jumpForce(600.0f), gravity(1000.0f),
     maxFallSpeed(1000.0f), isOnGround(false), groundY(startY),
     startX(startX), startY(startY)
 {

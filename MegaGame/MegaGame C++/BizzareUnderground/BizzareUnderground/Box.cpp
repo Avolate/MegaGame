@@ -4,7 +4,7 @@ Box::Box(float x, float y)
     : gravity(1000.0f), maxFallSpeed(1000.0f), isOnGround(false)
 {
     // Создаём коробку (размер 30x30 - половина персонажа)
-    body.setSize(sf::Vector2f(30.0f, 30.0f));
+    body.setSize(sf::Vector2f(50.0f, 50.0f));
     body.setPosition(x, y);
     body.setFillColor(sf::Color::White);  // Белая коробка
     
@@ -41,8 +41,8 @@ void Box::update(float deltaTime)
     // Если коробка упала ниже экрана, ставим её на начальную позицию
     if (newPos.y > 800)
     {
-        newPos.y = 0;
-        newPos.x = 600;
+        newPos.y = 600;
+        newPos.x = 1000;
         velocity = sf::Vector2f(0.0f, 0.0f);
     }
     
