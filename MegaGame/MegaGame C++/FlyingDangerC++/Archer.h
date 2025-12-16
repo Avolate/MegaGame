@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "GameObject.h"
 
@@ -13,6 +13,7 @@ public:
 	void setMousePos(float mouseX, float mouseY);
 
 	sf::FloatRect getBounds() const { return spritePlayer.getGlobalBounds(); }
+	sf::FloatRect getPlatformBounds() const { return spritePlatform.getGlobalBounds(); } // ← ДОБАВИТЬ
 
 private:
 	sf::Texture textureJohn;

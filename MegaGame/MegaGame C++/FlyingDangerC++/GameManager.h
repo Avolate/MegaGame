@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 
 #include <SFML/Graphics.hpp>
 #include <vector>
@@ -14,7 +14,7 @@ enum class GameState
 {
 	MENU,
 	PLAYING,
-	PAUSED,
+	PAUSED,        
 	GAME_OVER,
 	WIN
 };
@@ -31,9 +31,11 @@ private:
 	void update(float deltaTime);
 	void render();
 	void spawnBoulder();
-	void spawnBackground();
 	void drawHUD();
 	void checkCollisions();
+	void drawPauseMenu();  
+	void drawGameOverMenu();
+	void restartGame();    
 
 	sf::RenderWindow window;
 	GameState currentState;
@@ -45,25 +47,26 @@ private:
 	std::vector<HealthPotion*> healthPotions;
 	BossBoulder* bossBoulder;
 
-	// Фоны
+	// Р¤РѕРЅС‹
 	sf::Texture bgTexture1, bgTexture2;
 	sf::Sprite bgSprite1, bgSprite2;
 	float bgScrollX;
 
-	// Счётчики
+	// РЎС‡С‘С‚С‡РёРєРё
 	int score;
 	int archerHealth;
 	int castleHealth;
+	float multiSpawnChance = 0.3f;
 
-	// Время и спавнинг
+	// Р’СЂРµРјСЏ Рё СЃРїР°РІРЅРёРЅРі
 	sf::Clock clock;
 	sf::Clock spawnTimer;
 	float spawnInterval;
 	int bouldersOnScreen;
 
-	// Шрифт для HUD
+	// РЁСЂРёС„С‚ РґР»СЏ HUD
 	sf::Font font;
 
-	// Флаг для отслеживания активности босса
+	// Р¤Р»Р°Рі РґР»СЏ РѕС‚СЃР»РµР¶РёРІР°РЅРёСЏ Р°РєС‚РёРІРЅРѕСЃС‚Рё Р±РѕСЃСЃР°
 	bool bossActive;
 };
