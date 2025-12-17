@@ -1,6 +1,6 @@
 #include "BossBoulder.h"
 
-BossBoulder::BossBoulder() : GameObject(), health(5)
+BossBoulder::BossBoulder() : GameObject(), health(10)
 {
 	x = 1500.0f;
 	y = 150.0f;
