@@ -1,84 +1,50 @@
 #include "Key.h"
 
-// Инициализация статических переменных
 sf::Texture Key::keyTexture;
-bool Key::textureLoaded = false;
-bool Key::textureInitialized = false;
+
+Key::Key(float startX, float startY)
+    : GameObject(startX, startY), spriteLoaded(false), collected(false)
+{
+    shape.setSize(sf::Vector2f(SIZE, SIZE));
+    shape.setPosition(x, y);
+    shape.setFillColor(sf::Color::Transparent);  
+
+    keySprite.setTexture(keyTexture);
+    float scale = (SIZE * 3.0f) / keyTexture.getSize().x;  
+    keySprite.setScale(scale, scale);
+    keySprite.setPosition(x, y);
+    spriteLoaded = true;
+}
 
 void Key::loadKeyTexture()
 {
-    if (textureInitialized)
-        return;
-
-    textureInitialized = true;
-
-    // ========== ЗАГРУЖАЕМ СПРАЙТ ОДИН РАЗ ==========
-    
-        if (keyTexture.loadFromFile("../x64/Debug/key.png") ||
-            keyTexture.loadFromFile("../../x64/Debug/key.png"))
-        {
-            textureLoaded = true;
-            keyTexture.setRepeated(true);
-        }
-        else
-        {
-            textureLoaded = false;
-        }
-    
-    // ===============================================
+    keyTexture.loadFromFile("../x64/Debug/key.png");
+    keyTexture.loadFromFile("../../x64/Debug/key.png");
 }
 
-Key::Key(float startX, float startY)
-    : x(startX), y(startY), collected(false)
+void Key::update(float deltaTime)
 {
-    shape.setRadius(RADIUS);
-    shape.setFillColor(sf::Color::Transparent);
-    shape.setPosition(x, y);
-
-    // ========== СОЗДАЕМ СПРАЙТ С ТЕКСТУРОЙ ==========
-    if (textureLoaded)
-    {
-        keySprite.setTexture(keyTexture, true);
-
-        // Масштабируем спрайт по размеру ключа (20x20 - диаметр круга)
-        float diameter = RADIUS * 5;
-        float scaleX = diameter / keyTexture.getSize().x;
-        float scaleY = diameter / keyTexture.getSize().y;
-        keySprite.setScale(scaleX, scaleY);
-
-        keySprite.setPosition(x, y);
-    }
-    // ================================================
+    // Ключи статичны - ничего не делаем
 }
 
 void Key::draw(sf::RenderWindow& window)
 {
-    // Если собран - не рисуем
-    if (collected)
-        return;
-
-    // Рисуем желтый круг сзади
-    window.draw(shape);
-
-    // ========== РИСУЕМ СПРАЙТ ПОВЕРХ ==========
-    if (textureLoaded)
+    if (!collected)
     {
-        window.draw(keySprite);
+        window.draw(shape);
+        if (spriteLoaded)
+        {
+            window.draw(keySprite);
+        }
     }
-    // =========================================
-}
-
-sf::FloatRect Key::getBounds() const
-{
-    return shape.getGlobalBounds();
-}
-
-bool Key::isCollected() const
-{
-    return collected;
 }
 
 void Key::collect()
 {
     collected = true;
+}
+
+bool Key::isCollected() const
+{
+    return collected;
 }

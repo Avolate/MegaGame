@@ -1,16 +1,13 @@
 #pragma once
-#include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
-class Box
+
+#include "GameObject.h"
+
+class Box : public GameObject
 {
 private:
-    float x, y;
-    sf::RectangleShape shape;
-
-    // ========== СПРАЙТ ==========
     sf::Texture boxTexture;
     sf::Sprite boxSprite;
     bool spriteLoaded;
-    // =============================
 
     sf::Vector2f velocity;
     bool onGround;
@@ -19,11 +16,10 @@ private:
 public:
     Box(float startX, float startY);
 
-    void update(float deltaTime);
-    void draw(sf::RenderWindow& window);
+    void update(float deltaTime) override;
+    void draw(sf::RenderWindow& window) override;
 
-    sf::FloatRect getBounds() const;
-    void setPosition(float newX, float newY);
+    void setPosition(float newX, float newY) override;
     void setVelocity(float vx, float vy);
     sf::Vector2f getVelocity() const;
     void stopVerticalVelocity();

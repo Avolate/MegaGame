@@ -1,13 +1,12 @@
 #include "Dart.h"
 
-Dart::Dart(float x, float y, float directionX) : isActive(true)
+Dart::Dart(float x, float y, float directionX)
+    : GameObject(x, y), velocity(0.0f, 0.0f), isActive(true)
 {
-    // Создаём дротик (маленький прямоугольник 15x5)
-    body.setSize(sf::Vector2f(15.0f, 5.0f));
-    body.setPosition(x, y);
-    body.setFillColor(sf::Color (46, 139, 87));  // Фиолетовый дротик
-    
-    // Скорость дротика (600 px/s)
+    shape.setSize(sf::Vector2f(15.0f, 5.0f));
+    shape.setPosition(x, y);
+    shape.setFillColor(sf::Color(46, 139, 87));
+
     velocity = sf::Vector2f(600.0f * directionX, 0.0f);
 }
 
@@ -15,32 +14,25 @@ void Dart::update(float deltaTime)
 {
     if (!isActive)
         return;
-    
-    // Обновление позиции
-    sf::Vector2f newPos = body.getPosition();
+
+    sf::Vector2f newPos = shape.getPosition();
     newPos.x += velocity.x * deltaTime;
-    
-    // Если дротик вышел за границы экрана, уничтожаем его
+
     if (newPos.x < 0 || newPos.x > 1200)
     {
         isActive = false;
         return;
     }
-    
-    body.setPosition(newPos);
+
+    shape.setPosition(newPos);
 }
 
 void Dart::draw(sf::RenderWindow& window)
 {
     if (isActive)
     {
-        window.draw(body);
+        window.draw(shape);
     }
-}
-
-sf::FloatRect Dart::getBounds() const
-{
-    return body.getGlobalBounds();
 }
 
 bool Dart::getIsActive() const

@@ -1,18 +1,19 @@
 #pragma once
-#include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
 
-class Button
+#include "GameObject.h"
+
+class Button : public GameObject
 {
 private:
-    sf::RectangleShape shape;
     bool isPressed;
 
 public:
     Button(float x, float y);
-    
-    void draw(sf::RenderWindow& window);
-    sf::FloatRect getBounds() const;
-    
+
+    void update(float deltaTime) override;
+    void draw(sf::RenderWindow& window) override;
+    sf::FloatRect getBounds() const override;
+
     bool getIsPressed() const;
     void press();
     void release();

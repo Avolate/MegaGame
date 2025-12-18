@@ -1,30 +1,27 @@
 #pragma once
-#include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
 
-class Key
+#include "GameObject.h"
+
+class Key : public GameObject
 {
 private:
-    float x, y;
-    sf::CircleShape shape;
-
-    // ========== СПРАЙТ ==========
     static sf::Texture keyTexture;
-    static bool textureLoaded;
-    static bool textureInitialized;
     sf::Sprite keySprite;
-    // =============================
+    bool spriteLoaded;
 
-    bool collected;
-    const float RADIUS = 10.0f;
+    const float SIZE = 20.0f;
 
 public:
     Key(float startX, float startY);
 
-    void draw(sf::RenderWindow& window);
-    sf::FloatRect getBounds() const;
-    bool isCollected() const;
-    void collect();
-
-    // Статический метод для загрузки текстуры один раз
     static void loadKeyTexture();
+
+    void update(float deltaTime) override;
+    void draw(sf::RenderWindow& window) override;
+
+    void collect();
+    bool isCollected() const;
+
+private:
+    bool collected;
 };

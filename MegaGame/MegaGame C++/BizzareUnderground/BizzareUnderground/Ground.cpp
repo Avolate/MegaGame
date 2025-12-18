@@ -1,67 +1,43 @@
 #include "Ground.h"
 
-// Инициализация статических переменных
 sf::Texture Ground::groundTexture;
-bool Ground::textureLoaded = false;
-bool Ground::textureInitialized = false;
+
+Ground::Ground(float startX, float startY, float w, float h)
+    : GameObject(startX, startY), width(w), height(h), spriteLoaded(false)
+{
+    shape.setSize(sf::Vector2f(width, height));
+    shape.setPosition(x, y);
+    shape.setFillColor(sf::Color::Cyan);
+
+    // ========== СПРАЙТ БЕЗ РАСТЯГИВАНИЯ ==========
+    groundSprite.setTexture(groundTexture);
+    // НЕ масштабируем спрайт - оставляем оригинальный размер
+    // спрайт будет обрезан по размеру объекта благодаря маске
+    groundSprite.setPosition(x, y);
+
+    // Устанавливаем область видимости спрайта (обрезка)
+    groundSprite.setTextureRect(sf::IntRect(0, 0, (int)width, (int)height));
+
+    spriteLoaded = true;
+    // ============================================
+}
 
 void Ground::loadGroundTexture()
 {
-    if (textureInitialized)
-        return;
-
-    textureInitialized = true;
-
-    // ========== ЗАГРУЖАЕМ СПРАЙТ ОДИН РАЗ ==========
-    if (groundTexture.loadFromFile("../x64/Debug/ground.png") ||
-        groundTexture.loadFromFile("../../x64/Debug/ground.png"))
-    {
-        textureLoaded = true;
-        groundTexture.setRepeated(true);
-    }
-
-        else
-        {
-            textureLoaded = false;
-        }
-    
-    // ===============================================
+    groundTexture.loadFromFile("../x64/Debug/ground.png");
+    groundTexture.loadFromFile("../../x64/Debug/ground.png");
 }
 
-Ground::Ground(float startX, float startY, float w, float h)
-    : x(startX), y(startY), width(w), height(h)
+void Ground::update(float deltaTime)
 {
-    shape.setSize(sf::Vector2f(width, height));
-    shape.setFillColor(sf::Color::Black);
-    shape.setPosition(x, y);
-
-    // ========== СОЗДАЕМ СПРАЙТ С ТЕКСТУРОЙ ==========
-    if (textureLoaded)
-    {
-        groundSprite.setTexture(groundTexture, true);
-
-        // НЕ масштабируем, а используем TextureRect для обрезки
-        groundSprite.setTextureRect(sf::IntRect(0, 0, (int)width, (int)height));
-
-        groundSprite.setPosition(x, y);
-    }
-    // ================================================
+    // Платформы статичны - ничего не делаем
 }
 
 void Ground::draw(sf::RenderWindow& window)
 {
-    // Рисуем черный прямоугольник сзади
     window.draw(shape);
-
-    // ========== РИСУЕМ СПРАЙТ ПОВЕРХ (ОБРЕЗАННЫЙ) ==========
-    if (textureLoaded)
+    if (spriteLoaded)
     {
         window.draw(groundSprite);
     }
-    // ======================================================
-}
-
-sf::FloatRect Ground::getBounds() const
-{
-    return shape.getGlobalBounds();
 }

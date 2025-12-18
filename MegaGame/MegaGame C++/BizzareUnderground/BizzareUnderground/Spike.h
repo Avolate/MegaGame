@@ -1,14 +1,17 @@
 #pragma once
-#include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
 
-class Spike
+#include "GameObject.h"
+
+class Spike : public GameObject
 {
 private:
-    sf::ConvexShape triangle;  // Треугольник для спайка
+    sf::ConvexShape triangle;
+    float size;
 
 public:
-    Spike(float x, float y, float size);
-    
-    void draw(sf::RenderWindow& window);
-    sf::FloatRect getBounds() const;
+    Spike(float startX, float startY, float spikeSize);
+
+    void update(float deltaTime) override;
+    void draw(sf::RenderWindow& window) override;
+    sf::FloatRect getBounds() const override;
 };

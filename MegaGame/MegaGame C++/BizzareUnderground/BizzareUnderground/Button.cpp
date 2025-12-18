@@ -1,25 +1,27 @@
 #include "Button.h"
 
-Button::Button(float x, float y) : isPressed(false)
+Button::Button(float x, float y)
+    : GameObject(x, y), isPressed(false)
 {
-    // Создаём кнопку (оранжевый квадрат 40x20)
+    // Прямоугольник 40x8 как и раньше
     shape.setSize(sf::Vector2f(40.0f, 8.0f));
     shape.setPosition(x, y);
-    shape.setFillColor(sf::Color::Yellow);  // Жёлтая, когда не нажата
+    shape.setFillColor(sf::Color::Yellow); // Жёлтая, когда не нажата
+}
+
+void Button::update(float deltaTime)
+{
+    // Кнопка статична, логики обновления нет
 }
 
 void Button::draw(sf::RenderWindow& window)
 {
     // Меняем цвет в зависимости от нажатия
     if (isPressed)
-    {
-        shape.setFillColor(sf::Color::Transparent);  // Красная, когда нажата
-    }
+        shape.setFillColor(sf::Color::Transparent); // Когда нажата
     else
-    {
-        shape.setFillColor(sf::Color::Red);  // Жёлтая, когда отпущена
-    }
-    
+        shape.setFillColor(sf::Color::Red);          // Когда отпущена
+
     window.draw(shape);
 }
 

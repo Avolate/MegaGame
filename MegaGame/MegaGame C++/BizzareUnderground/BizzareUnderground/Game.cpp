@@ -9,8 +9,16 @@ gameOver(false), isPaused(false), levelComplete(false)
 {
     window.create(sf::VideoMode(static_cast<unsigned int>(WINDOW_WIDTH),
         static_cast<unsigned int>(WINDOW_HEIGHT)),
-        "Platformer Game");
+        "Bizzare Underground");
     window.setFramerateLimit(60);
+    sf::Image icon;
+    // Пытаемся загрузить иконку из разных путей
+    if (icon.loadFromFile("../x64/Debug/icon.png") ||
+        icon.loadFromFile("../../x64/Debug/icon.png") ||
+        icon.loadFromFile("icon.png"))
+    {
+        window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+    }
 
     // Загружаем шрифт для текста
     if (!font.loadFromFile("arial.ttf"))
@@ -910,7 +918,7 @@ void Game::renderGameOver()
     restartButton.setPosition(350, 400);
     window.draw(restartButton);
 
-    sf::Text restartText("Zaново", font, 30);
+    sf::Text restartText("Restart", font, 30);
     restartText.setFillColor(sf::Color::Black);
     restartText.setCharacterSize(30);
     restartText.setPosition(370, 408);
@@ -921,7 +929,7 @@ void Game::renderGameOver()
     exitButton.setPosition(650, 400);
     window.draw(exitButton);
 
-    sf::Text exitText("Vyjti", font, 30);
+    sf::Text exitText("Exit", font, 30);
     exitText.setFillColor(sf::Color::White);
     exitText.setCharacterSize(30);
     exitText.setPosition(680, 408);
@@ -945,7 +953,7 @@ void Game::renderLevelComplete()
     restartButton.setPosition(350, 450);
     window.draw(restartButton);
 
-    sf::Text restartText("Snova", font, 30);
+    sf::Text restartText("Restart", font, 30);
     restartText.setFillColor(sf::Color::Black);
     restartText.setCharacterSize(30);
     restartText.setPosition(375, 458);
@@ -956,7 +964,7 @@ void Game::renderLevelComplete()
     exitButton.setPosition(650, 450);
     window.draw(exitButton);
 
-    sf::Text exitText("Vyjti", font, 30);
+    sf::Text exitText("Exit", font, 30);
     exitText.setFillColor(sf::Color::White);
     exitText.setCharacterSize(30);
     exitText.setPosition(680, 458);
@@ -969,7 +977,7 @@ void Game::renderPauseMenu()
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
     window.draw(overlay);
 
-    sf::Text pauseText("PAUZA", font, 80);
+    sf::Text pauseText("PAUZE", font, 80);
     pauseText.setFillColor(sf::Color::Yellow);
     pauseText.setCharacterSize(80);
     pauseText.setPosition(WINDOW_WIDTH / 2 - 150, 80);
@@ -980,7 +988,7 @@ void Game::renderPauseMenu()
     continueButton.setPosition(200, 250);
     window.draw(continueButton);
 
-    sf::Text continueText("Prodolzhit", font, 20);
+    sf::Text continueText("Continue", font, 20);
     continueText.setFillColor(sf::Color::White);
     continueText.setCharacterSize(20);
     continueText.setPosition(210, 260);
@@ -1002,7 +1010,7 @@ void Game::renderPauseMenu()
     exitButton.setPosition(700, 250);
     window.draw(exitButton);
 
-    sf::Text exitText("Vyjti", font, 20);
+    sf::Text exitText("Exit", font, 20);
     exitText.setFillColor(sf::Color::White);
     exitText.setCharacterSize(20);
     exitText.setPosition(730, 260);

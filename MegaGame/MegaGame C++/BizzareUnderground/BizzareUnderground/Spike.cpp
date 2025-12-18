@@ -1,15 +1,24 @@
 #include "Spike.h"
 
-Spike::Spike(float x, float y, float size)
+Spike::Spike(float startX, float startY, float spikeSize)
+    : GameObject(startX, startY), size(spikeSize)
 {
-    // РЎРѕР·РґР°С‘Рј С‚СЂРµСѓРіРѕР»СЊРЅРёРє (РѕСЃС‚СЂРёРµ РІРІРµСЂС…)
-    triangle.setPointCount(3);
-    triangle.setPoint(0, sf::Vector2f(size / 2.0f, 0.0f));        // Р’РµСЂС€РёРЅР° РІРІРµСЂС…Сѓ
-    triangle.setPoint(1, sf::Vector2f(size, size));                 // РќРёР¶РЅРёР№ РїСЂР°РІС‹Р№ СѓРіРѕР»
-    triangle.setPoint(2, sf::Vector2f(0.0f, size));                 // РќРёР¶РЅРёР№ Р»РµРІС‹Р№ СѓРіРѕР»
-    
-    triangle.setPosition(x, y);
-    triangle.setFillColor(sf::Color::White);  // РљСЂР°СЃРЅС‹Рµ С€РёРїС‹
+    // Создаём белый треугольник (равносторонний)
+    triangle.setPointCount(3);  // 3 точки = треугольник
+
+    // Вершины треугольника
+    triangle.setPoint(0, sf::Vector2f(size / 2.0f, 0.0f));           // Верхняя вершина
+    triangle.setPoint(1, sf::Vector2f(size, size));                  // Правая нижняя вершина
+    triangle.setPoint(2, sf::Vector2f(0.0f, size));                  // Левая нижняя вершина
+
+    // Стиль
+    triangle.setFillColor(sf::Color::White);
+    triangle.setPosition(startX, startY);
+}
+
+void Spike::update(float deltaTime)
+{
+    // Шипы статичны - ничего не делаем
 }
 
 void Spike::draw(sf::RenderWindow& window)
