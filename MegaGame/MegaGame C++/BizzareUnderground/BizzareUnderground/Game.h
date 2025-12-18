@@ -1,5 +1,5 @@
 #pragma once
-#include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include "Player.h"
 #include "Ground.h"

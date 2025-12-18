@@ -1,6 +1,5 @@
 #pragma once
-#include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
-
+#include <SFML/Graphics.hpp>
 class Player
 {
 private:
