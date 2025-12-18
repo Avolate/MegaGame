@@ -9,7 +9,7 @@ Spike::Spike(float x, float y, float size)
     triangle.setPoint(2, sf::Vector2f(0.0f, size));                 // Нижний левый угол
     
     triangle.setPosition(x, y);
-    triangle.setFillColor(sf::Color::Red);  // Красные шипы
+    triangle.setFillColor(sf::Color::White);  // Красные шипы
 }
 
 void Spike::draw(sf::RenderWindow& window)

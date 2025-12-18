@@ -16,6 +16,11 @@ private:
     sf::RenderWindow window;
     sf::Font font;
 
+    // ========== ФОН ==========
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite;
+    // =======================
+
     Player player;
     Box* spawnedBox;
     Button button;

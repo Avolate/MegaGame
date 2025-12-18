@@ -5,7 +5,7 @@ Dart::Dart(float x, float y, float directionX) : isActive(true)
     // Создаём дротик (маленький прямоугольник 15x5)
     body.setSize(sf::Vector2f(15.0f, 5.0f));
     body.setPosition(x, y);
-    body.setFillColor(sf::Color::Magenta);  // Фиолетовый дротик
+    body.setFillColor(sf::Color (46, 139, 87));  // Фиолетовый дротик
     
     // Скорость дротика (600 px/s)
     velocity = sf::Vector2f(600.0f * directionX, 0.0f);

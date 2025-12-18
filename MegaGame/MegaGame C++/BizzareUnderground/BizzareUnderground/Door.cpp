@@ -1,31 +1,36 @@
 #include "Door.h"
 
-Door::Door(float x, float y) : isOpen(false)
+Door::Door(float startX, float startY)
+    : x(startX), y(startY), isOpen(false), spriteLoaded(false)
 {
-    // Создаём прямоугольник двери
-    shape.setSize(sf::Vector2f(50.0f, 80.0f));
+    shape.setSize(sf::Vector2f(WIDTH, HEIGHT));
+    shape.setFillColor(sf::Color::Blue);
     shape.setPosition(x, y);
-    shape.setFillColor(sf::Color::Magenta);  // Закрытая дверь - фиолетовая
+
+    // ========== ЗАГРУЖАЕМ СПРАЙТ ==========
+    doorTexture.loadFromFile("../x64/Debug/door.png");
+    doorTexture.loadFromFile("../../x64/Debug/door.png");
+    spriteLoaded = true;
+    doorSprite.setTexture(doorTexture);
+
+    // Масштабируем спрайт по размеру Door (60x80)
+    float scaleX = WIDTH / doorTexture.getSize().x;
+    float scaleY = HEIGHT / doorTexture.getSize().y;
+    doorSprite.setScale(scaleX, scaleY);
+
+    doorSprite.setPosition(x, y);
 }
 
-void Door::draw(sf::RenderWindow& window)
+void Door::open()
 {
-    // Меняем цвет в зависимости от открыта ли дверь
-    if (isOpen)
-    {
-        shape.setFillColor(sf::Color::Green);  // Открытая дверь - зелёная
-    }
-    else
-    {
-        shape.setFillColor(sf::Color::Magenta);  // Закрытая дверь - фиолетовая
-    }
-    
-    window.draw(shape);
+    isOpen = true;
+    shape.setFillColor(sf::Color::Green);
 }
 
-sf::FloatRect Door::getBounds() const
+void Door::close()
 {
-    return shape.getGlobalBounds();
+    isOpen = false;
+    shape.setFillColor(sf::Color::Blue);
 }
 
 bool Door::getIsOpen() const
@@ -33,12 +38,20 @@ bool Door::getIsOpen() const
     return isOpen;
 }
 
-void Door::open()
+sf::FloatRect Door::getBounds() const
 {
-    isOpen = true;
+    return shape.getGlobalBounds();
 }
 
-void Door::close()
+void Door::draw(sf::RenderWindow& window)
 {
-    isOpen = false;
+    // Рисуем синий/зеленый прямоугольник сзади
+    window.draw(shape);
+
+    // ========== РИСУЕМ СПРАЙТ ПОВЕРХ ==========
+    if (spriteLoaded)
+    {
+        window.draw(doorSprite);
+    }
+    // =========================================
 }

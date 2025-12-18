@@ -4,16 +4,25 @@
 class Door
 {
 private:
+    float x, y;
     sf::RectangleShape shape;
-    bool isOpen;  // Открыта ли дверь
+
+    // ========== СПРАЙТ ==========
+    sf::Texture doorTexture;
+    sf::Sprite doorSprite;
+    bool spriteLoaded;
+    // =============================
+
+    bool isOpen;
+    const float WIDTH = 60.0f;
+    const float HEIGHT = 80.0f;
 
 public:
-    Door(float x, float y);
-    
-    void draw(sf::RenderWindow& window);
-    sf::FloatRect getBounds() const;
-    
-    bool getIsOpen() const;
+    Door(float startX, float startY);
+
     void open();
     void close();
+    bool getIsOpen() const;
+    sf::FloatRect getBounds() const;
+    void draw(sf::RenderWindow& window);
 };

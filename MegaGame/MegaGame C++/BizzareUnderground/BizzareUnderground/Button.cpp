@@ -3,7 +3,7 @@
 Button::Button(float x, float y) : isPressed(false)
 {
     // Создаём кнопку (оранжевый квадрат 40x20)
-    shape.setSize(sf::Vector2f(40.0f, 20.0f));
+    shape.setSize(sf::Vector2f(40.0f, 8.0f));
     shape.setPosition(x, y);
     shape.setFillColor(sf::Color::Yellow);  // Жёлтая, когда не нажата
 }
@@ -13,11 +13,11 @@ void Button::draw(sf::RenderWindow& window)
     // Меняем цвет в зависимости от нажатия
     if (isPressed)
     {
-        shape.setFillColor(sf::Color::Red);  // Красная, когда нажата
+        shape.setFillColor(sf::Color::Transparent);  // Красная, когда нажата
     }
     else
     {
-        shape.setFillColor(sf::Color::Yellow);  // Жёлтая, когда отпущена
+        shape.setFillColor(sf::Color::Red);  // Жёлтая, когда отпущена
     }
     
     window.draw(shape);

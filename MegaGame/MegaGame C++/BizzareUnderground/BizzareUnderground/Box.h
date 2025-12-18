@@ -1,33 +1,32 @@
 #pragma once
 #include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
-
 class Box
 {
 private:
-    sf::RectangleShape body;
+    float x, y;
+    sf::RectangleShape shape;
+
+    // ========== СПРАЙТ ==========
+    sf::Texture boxTexture;
+    sf::Sprite boxSprite;
+    bool spriteLoaded;
+    // =============================
+
     sf::Vector2f velocity;
-    
-    // Физика
-    float gravity;
-    float maxFallSpeed;
-    bool isOnGround;
+    bool onGround;
+    const float GRAVITY = 500.0f;
 
 public:
-    Box(float x, float y);
-    
+    Box(float startX, float startY);
+
     void update(float deltaTime);
     void draw(sf::RenderWindow& window);
-    
+
     sf::FloatRect getBounds() const;
-    sf::Vector2f getPosition() const;
-    
-    void setPosition(float x, float y);
+    void setPosition(float newX, float newY);
     void setVelocity(float vx, float vy);
     sf::Vector2f getVelocity() const;
-    
-    void setOnGround(bool grounded);
-    bool getIsOnGround() const;
-    
     void stopVerticalVelocity();
     void stopHorizontalVelocity();
+    void setOnGround(bool ground);
 };

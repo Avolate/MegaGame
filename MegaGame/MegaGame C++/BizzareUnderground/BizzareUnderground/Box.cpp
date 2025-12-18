@@ -1,72 +1,111 @@
 #include "Box.h"
 
-Box::Box(float x, float y)
-    : gravity(1000.0f), maxFallSpeed(1000.0f), isOnGround(false)
+Box::Box(float startX, float startY)
+    : x(startX), y(startY), velocity(0.0f, 0.0f), onGround(false), spriteLoaded(false)
 {
-    // Создаём коробку (размер 30x30 - половина персонажа)
-    body.setSize(sf::Vector2f(50.0f, 50.0f));
-    body.setPosition(x, y);
-    body.setFillColor(sf::Color::White);  // Белая коробка
-    
-    velocity = sf::Vector2f(0.0f, 0.0f);
+    shape.setSize(sf::Vector2f(50.0f, 50.0f));
+    shape.setFillColor(sf::Color::White);
+    shape.setPosition(x, y);
+
+    // ========== ЗАГРУЖАЕМ СПРАЙТ ==========
+    boxTexture.loadFromFile("../x64/Debug/box.png");
+    boxTexture.loadFromFile("../../x64/Debug/box.png");
+    spriteLoaded = true;
+    boxSprite.setTexture(boxTexture);
+
+    // Масштабируем спрайт по размеру Box (50x50)
+    float scaleX = 50.0f / boxTexture.getSize().x;
+    float scaleY = 50.0f / boxTexture.getSize().y;
+    boxSprite.setScale(scaleX, scaleY);
+
+    boxSprite.setPosition(x, y);
 }
 
 void Box::update(float deltaTime)
 {
-    // Применение гравитации
-    if (!isOnGround)
+    if (!onGround)
     {
-        velocity.y += gravity * deltaTime;
-        if (velocity.y > maxFallSpeed)
-            velocity.y = maxFallSpeed;
+        velocity.y += GRAVITY * deltaTime;
     }
-    else
+
+    y += velocity.y * deltaTime;
+    x += velocity.x * deltaTime;
+
+    // ========== ОГРАНИЧИВАЕМ ДВИЖЕНИЕ ПО ЭКРАНУ ==========
+    const float BOX_WIDTH = 50.0f;
+    const float BOX_HEIGHT = 50.0f;
+    const float WINDOW_WIDTH = 1200.0f;
+    const float WINDOW_HEIGHT = 800.0f;
+
+    // Границы слева и справа
+    if (x < 0.0f)
+        x = 0.0f;
+    if (x + BOX_WIDTH > WINDOW_WIDTH)
+        x = WINDOW_WIDTH - BOX_WIDTH;
+
+    // Границы сверху и снизу (если упала за экран - перезагружаем)
+    if (y > WINDOW_HEIGHT)
     {
-        // Если на земле, обнуляем вертикальную скорость
-        if (velocity.y > 0.0f)
-            velocity.y = 0.0f;
+        // Коробка упала - перезагружаем уровень
+        // Это обработается в Game.cpp через checkCollisions()
     }
-    
-    // Обновление позиции
-    sf::Vector2f newPos = body.getPosition();
-    newPos.x += velocity.x * deltaTime;
-    newPos.y += velocity.y * deltaTime;
-    
-    // Проверка границ экрана
-    if (newPos.x < 0)
-        newPos.x = 0;
-    if (newPos.x + body.getSize().x > 1200)
-        newPos.x = 1200 - body.getSize().x;
-    
-    // Если коробка упала ниже экрана, ставим её на начальную позицию
-    if (newPos.y > 800)
+    // ====================================================
+
+    shape.setPosition(x, y);
+
+    // ========== СИНХРОНИЗИРУЕМ СПРАЙТ ==========
+    if (spriteLoaded)
     {
-        newPos.y = 600;
-        newPos.x = 1000;
-        velocity = sf::Vector2f(0.0f, 0.0f);
+        boxSprite.setPosition(x, y);
     }
-    
-    body.setPosition(newPos);
+    // ==========================================
 }
 
 void Box::draw(sf::RenderWindow& window)
 {
-    window.draw(body);
+    // Рисуем белый квадрат сзади
+    window.draw(shape);
+
+    // ========== РИСУЕМ СПРАЙТ ПОВЕРХ ==========
+    if (spriteLoaded)
+    {
+        window.draw(boxSprite);
+    }
+    // =========================================
 }
 
 sf::FloatRect Box::getBounds() const
 {
-    return body.getGlobalBounds();
+    return shape.getGlobalBounds();
 }
 
-sf::Vector2f Box::getPosition() const
+void Box::setPosition(float newX, float newY)
 {
-    return body.getPosition();
-}
+    // ========== ОГРАНИЧИВАЕМ ПОЗИЦИЮ ==========
+    const float BOX_WIDTH = 50.0f;
+    const float BOX_HEIGHT = 50.0f;
+    const float WINDOW_WIDTH = 1200.0f;
+    const float WINDOW_HEIGHT = 800.0f;
 
-void Box::setPosition(float x, float y)
-{
-    body.setPosition(x, y);
+    // Проверяем границы экрана
+    if (newX < 0.0f)
+        newX = 0.0f;
+    if (newX + BOX_WIDTH > WINDOW_WIDTH)
+        newX = WINDOW_WIDTH - BOX_WIDTH;
+
+    // newY может быть за пределами (для падения)
+    // ==========================================
+
+    x = newX;
+    y = newY;
+    shape.setPosition(x, y);
+
+    // ========== ОБНОВЛЯЕМ ПОЗИЦИЮ СПРАЙТА ==========
+    if (spriteLoaded)
+    {
+        boxSprite.setPosition(x, y);
+    }
+    // =============================================
 }
 
 void Box::setVelocity(float vx, float vy)
@@ -80,16 +119,6 @@ sf::Vector2f Box::getVelocity() const
     return velocity;
 }
 
-void Box::setOnGround(bool grounded)
-{
-    isOnGround = grounded;
-}
-
-bool Box::getIsOnGround() const
-{
-    return isOnGround;
-}
-
 void Box::stopVerticalVelocity()
 {
     velocity.y = 0.0f;
@@ -98,4 +127,9 @@ void Box::stopVerticalVelocity()
 void Box::stopHorizontalVelocity()
 {
     velocity.x = 0.0f;
+}
+
+void Box::setOnGround(bool ground)
+{
+    onGround = ground;
 }

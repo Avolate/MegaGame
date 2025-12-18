@@ -4,11 +4,22 @@
 class Ground
 {
 private:
+    float x, y, width, height;
     sf::RectangleShape shape;
 
+    // ========== СПРАЙТ ==========
+    static sf::Texture groundTexture;
+    static bool textureLoaded;
+    static bool textureInitialized;
+    sf::Sprite groundSprite;
+    // =============================
+
 public:
-    Ground(float x, float y, float width, float height);
-    
+    Ground(float startX, float startY, float w, float h);
+
     void draw(sf::RenderWindow& window);
     sf::FloatRect getBounds() const;
+
+    // Статический метод для загрузки текстуры один раз
+    static void loadGroundTexture();
 };
