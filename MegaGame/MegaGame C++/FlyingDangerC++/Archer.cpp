@@ -23,7 +23,7 @@ Archer::Archer() : GameObject(), mouseX(800.0f), mouseY(400.0f)
 		// Fallback
 	}
 	spritePlatform.setTexture(texturePlatform);
-	spritePlatform.setPosition(x - 80, y + 20);
+	spritePlatform.setPosition(x - 70, y + 60);
 }
 
 void Archer::setMousePos(float mx, float my)
@@ -52,7 +52,7 @@ void Archer::update(float deltaTime)
 	if (y > maxY) y = maxY;
 
 	spritePlayer.setPosition(x, y);
-	spritePlatform.setPosition(x - 80, y + 20);
+	spritePlatform.setPosition(x - 70, y + 60);
 }
 
 void Archer::draw(sf::RenderWindow& window)
