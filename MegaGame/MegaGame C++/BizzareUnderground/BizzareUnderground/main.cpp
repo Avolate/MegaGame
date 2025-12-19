@@ -1,18 +1,14 @@
-#include <iostream>
 #include "Game.h"
+
+#ifdef _WIN32
+#pragma comment(linker, "/SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
+#include <windows.h>
+#endif
 
 int main()
 {
-    try
-    {
-        Game game;
-        game.run();
-    }
-    catch (const std::exception& e)
-    {
-        std::cerr << "Error: " << e.what() << std::endl;
-        return -1;
-    }
+    Game game;
+    game.run();
 
     return 0;
 }

@@ -1,18 +1,27 @@
 #pragma once
-#include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
 
-class Key
+#include "GameObject.h"
+
+class Key : public GameObject
 {
 private:
-    sf::RectangleShape shape;
-    bool collected;  // Собран ли ключ
+    static sf::Texture keyTexture;
+    sf::Sprite keySprite;
+    bool spriteLoaded;
+
+    const float SIZE = 20.0f;
 
 public:
-    Key(float x, float y);
-    
-    void draw(sf::RenderWindow& window);
-    sf::FloatRect getBounds() const;
-    
-    bool isCollected() const;
+    Key(float startX, float startY);
+
+    static void loadKeyTexture();
+
+    void update(float deltaTime) override;
+    void draw(sf::RenderWindow& window) override;
+
     void collect();
+    bool isCollected() const;
+
+private:
+    bool collected;
 };

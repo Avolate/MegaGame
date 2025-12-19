@@ -1,7 +1,7 @@
 #include "Game.h"
 
 Game::Game() : player(100.0f, 550.0f),
-button(1100.0f, 680.0f), button2(300.0f, 680.0f), button3(0.0f, 280.0f),
+button(1100.0f, 692.0f), button2(300.0f, 692.0f), button3(0.0f, 292.0f),
 door(590.0f, 30.0f),
 keysCollected(0), buttonActivated(false), platformsActive(false),
 button3Pressed(false), delayedPlatformActive(false), spawnedBox(nullptr),
@@ -9,10 +9,44 @@ gameOver(false), isPaused(false), levelComplete(false)
 {
     window.create(sf::VideoMode(static_cast<unsigned int>(WINDOW_WIDTH),
         static_cast<unsigned int>(WINDOW_HEIGHT)),
-        "Platformer Game");
+        "Bizzare Underground");
     window.setFramerateLimit(60);
+    sf::Image icon;
+    // Пытаемся загрузить иконку из разных путей
+    if (icon.loadFromFile("../x64/Debug/icon.png") ||
+        icon.loadFromFile("../../x64/Debug/icon.png") ||
+        icon.loadFromFile("icon.png"))
+    {
+        window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
+    }
+
+    // Загружаем шрифт для текста
+    if (!font.loadFromFile("arial.ttf"))
+    {
+        font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf");
+    }
+
+    // ========== ЗАГРУЖАЕМ ФОНОВУЮ КАРТИНКУ ==========
+    if (!backgroundTexture.loadFromFile("../../x64/Debug/background.png") &&
+        !backgroundTexture.loadFromFile("../x64/Debug/background.png"))
+    {
+    }
+    else
+    {
+        backgroundSprite.setTexture(backgroundTexture);
+        backgroundSprite.setPosition(0, 0);
+    }
+    
+    // ================================================
+
+    // ========== ЗАГРУЖАЕМ ТЕКСТУРУ GROUND ПЕРЕД ИНИЦИАЛИЗАЦИЕЙ УРОВНЯ ==========
+    Ground::loadGroundTexture();
+    Key::loadKeyTexture();
+    Player::loadPlayerTexture();
+    player.initSprite();
+    // ==========================================================================
+
     initializeLevel();
-    font.loadFromFile("C:\\Windows\\Fonts\\arial.ttf");
 }
 
 Game::~Game()
@@ -53,27 +87,24 @@ void Game::initializeLevel()
         spawnedBox = nullptr;
     }
 
-    // ========== ВОЗВРАЩАЕМ ПЕРСОНАЖА НА НАЧАЛЬНУЮ ПОЗИЦИЮ ==========
     player.setPosition(PLAYER_START_X, PLAYER_START_Y);
     player.stopVerticalVelocity();
     player.stopHorizontalVelocity();
-    // ======================================================================
 
     grounds.emplace_back(0.0f, 700.0f, 1200.0f, 100.0f);
     grounds.emplace_back(0.0f, 0.0f, 1200.0f, 5.0f);
-    grounds.emplace_back(900.0f, 400.0f, 200.0f, 5.0f);
-    grounds.emplace_back(1100.0f, 250.0f, 100.0f, 5.0f);
-    grounds.emplace_back(1000.0f, 100.0f, 100.0f, 5.0f);
-    grounds.emplace_back(1000.0f, 0.0f, 5.0f, 400.0f);
-    grounds.emplace_back(580.0f, 450.0f, 150.0f, 5.0f);//правая
-    grounds.emplace_back(300.0f, 450.0f, 150.0f, 5.0f);//лквая
-    grounds.emplace_back(520.0f, 110.0f, 200.0f, 5.0f);
-    grounds.emplace_back(780.0f, 220.0f, 160.0f, 5.0f);
-    grounds.emplace_back(0.0f, 300.0f, 200.0f, 5.0f);
+    grounds.emplace_back(900.0f, 400.0f, 200.0f, 20.0f);
+    grounds.emplace_back(1100.0f, 250.0f, 100.0f, 20.0f);
+    grounds.emplace_back(1000.0f, 100.0f, 100.0f, 20.0f);
+    grounds.emplace_back(1000.0f, 0.0f, 20.0f, 400.0f);
+    grounds.emplace_back(580.0f, 450.0f, 150.0f, 20.0f);
+    grounds.emplace_back(300.0f, 450.0f, 150.0f, 20.0f);
+    grounds.emplace_back(520.0f, 110.0f, 200.0f, 20.0f);
+    grounds.emplace_back(780.0f, 220.0f, 160.0f, 20.0f);
+    grounds.emplace_back(0.0f, 300.0f, 200.0f, 20.0f);
 
-    // Временные платформы (активируются при нажатии кнопки 2)
-    temporaryGrounds.emplace_back(1100.0f, 550.0f, 300.0f, 5.0f);
-    temporaryGrounds.emplace_back(850.0f, 500.0f, 150.0f, 5.0f);
+    temporaryGrounds.emplace_back(1100.0f, 550.0f, 300.0f, 20.0f);
+    temporaryGrounds.emplace_back(850.0f, 500.0f, 150.0f, 20.0f);
 
     spikes.emplace_back(200.0f, 660.0f, 40.0f);
     spikes.emplace_back(355.0f, 410.0f, 40.0f);
@@ -82,7 +113,7 @@ void Game::initializeLevel()
     spikes.emplace_back(900.0f, 180.0f, 40.0f);
 
     keys.emplace_back(1050.0f, 50.0f);
-    keys.emplace_back(840.0f, 180.0f);
+    keys.emplace_back(840.0f, 170.0f);
     keys.emplace_back(350.0f, 175.0f);
 }
 
@@ -123,12 +154,10 @@ void Game::handleMouseClick(int x, int y)
 {
     if (gameOver)
     {
-        // Кнопка "Заново" (Рестарт) - позиция (350, 400), размер (200, 60)
         if (x >= 350 && x <= 550 && y >= 400 && y <= 460)
         {
             initializeLevel();
         }
-        // Кнопка "Выйти" - позиция (650, 400), размер (200, 60)
         else if (x >= 650 && x <= 850 && y >= 400 && y <= 460)
         {
             window.close();
@@ -136,12 +165,10 @@ void Game::handleMouseClick(int x, int y)
     }
     else if (levelComplete)
     {
-        // Кнопка "Снова" (Рестарт) - позиция (350, 450), размер (200, 60)
         if (x >= 350 && x <= 550 && y >= 450 && y <= 510)
         {
             initializeLevel();
         }
-        // Кнопка "Выйти" - позиция (650, 450), размер (200, 60)
         else if (x >= 650 && x <= 850 && y >= 450 && y <= 510)
         {
             window.close();
@@ -149,18 +176,15 @@ void Game::handleMouseClick(int x, int y)
     }
     else if (isPaused)
     {
-        // Кнопка "Продолжить" - позиция (200, 250), размер (180, 60)
         if (x >= 200 && x <= 380 && y >= 250 && y <= 310)
         {
             isPaused = false;
             dartSpawner.restart();
         }
-        // Кнопка "Рестарт" - позиция (450, 250), размер (180, 60)
         else if (x >= 450 && x <= 630 && y >= 250 && y <= 310)
         {
             initializeLevel();
         }
-        // Кнопка "Выйти" - позиция (700, 250), размер (180, 60)
         else if (x >= 700 && x <= 880 && y >= 250 && y <= 310)
         {
             window.close();
@@ -177,7 +201,6 @@ void Game::update()
 {
     float deltaTime = gameClock.restart().asSeconds();
 
-    // Если пауза, Game Over или Level Complete, не обновляем игру
     if (isPaused || gameOver || levelComplete)
         return;
 
@@ -187,7 +210,6 @@ void Game::update()
         dartSpawner.restart();
     }
 
-    // Обновляем таймер платформы с задержкой
     if (delayedPlatformActive && delayedPlatformTimer.getElapsedTime().asSeconds() >= DELAYED_PLATFORM_DURATION)
     {
         delayedGrounds.clear();
@@ -224,7 +246,6 @@ void Game::checkCollisions()
 
     bool isPlayerColliding = false;
 
-    // ==================== ПРОВЕРКА НАЖАТИЯ КНОПКИ 1 ====================
     bool playerOnButton = playerBounds.intersects(buttonBounds);
     if (spawnedBox != nullptr && spawnedBoxBounds != nullptr)
     {
@@ -242,7 +263,6 @@ void Game::checkCollisions()
         button.release();
     }
 
-    // ==================== ПРОВЕРКА НАЖАТИЯ КНОПКИ 2 (ПЛАТФОРМЫ) ====================
     bool playerOnButton2 = playerBounds.intersects(button2Bounds);
     if (spawnedBox != nullptr && spawnedBoxBounds != nullptr)
     {
@@ -260,7 +280,6 @@ void Game::checkCollisions()
         platformsActive = false;
     }
 
-    // ==================== ПРОВЕРКА НАЖАТИЯ КНОПКИ 3 (ПЛАТФОРМА С ЗАДЕРЖКОЙ) ====================
     bool playerOnButton3 = playerBounds.intersects(button3Bounds);
     if (spawnedBox != nullptr && spawnedBoxBounds != nullptr)
     {
@@ -270,7 +289,6 @@ void Game::checkCollisions()
     if (playerOnButton3)
     {
         button3.press();
-        // Создаём платформу если её ещё нет
         if (delayedGrounds.empty() && !button3Pressed)
         {
             delayedGrounds.emplace_back(335.0f, 205.0f, 50.0f, 5.0f);
@@ -285,7 +303,6 @@ void Game::checkCollisions()
         button3Pressed = false;
     }
 
-    // ==================== КОЛЛИЗИИ ПЕРСОНАЖА С ДРОТИКАМИ ====================
     playerBounds = player.getBounds();
     for (auto& dart : darts)
     {
@@ -296,7 +313,6 @@ void Game::checkCollisions()
         }
     }
 
-    // ==================== УНИЧТОЖЕНИЕ ДРОТИКОВ ====================
     for (auto& dart : darts)
     {
         if (!dart.getIsActive())
@@ -355,7 +371,6 @@ void Game::checkCollisions()
         }
     }
 
-    // ==================== КОЛЛИЗИИ ПЕРСОНАЖА С ПЛАТФОРМАМИ ====================
     playerBounds = player.getBounds();
     for (const auto& ground : grounds)
     {
@@ -408,7 +423,6 @@ void Game::checkCollisions()
         }
     }
 
-    // ==================== КОЛЛИЗИИ ПЕРСОНАЖА С ВРЕМЕННЫМИ ПЛАТФОРМАМИ ====================
     if (platformsActive && !isPlayerColliding)
     {
         playerBounds = player.getBounds();
@@ -464,7 +478,6 @@ void Game::checkCollisions()
         }
     }
 
-    // ==================== КОЛЛИЗИИ ПЕРСОНАЖА С ПЛАТФОРМАМИ С ЗАДЕРЖКОЙ ====================
     if (delayedPlatformActive && !isPlayerColliding)
     {
         playerBounds = player.getBounds();
@@ -523,7 +536,6 @@ void Game::checkCollisions()
     if (!isPlayerColliding)
         player.setOnGround(false);
 
-    // ==================== КОЛЛИЗИИ СПАВНЕННОЙ КОРОБКИ С ПЛАТФОРМАМИ ====================
     if (spawnedBox != nullptr)
     {
         sf::FloatRect spawnedBounds = spawnedBox->getBounds();
@@ -574,7 +586,6 @@ void Game::checkCollisions()
             }
         }
 
-        // Коллизии со временными платформами
         if (platformsActive)
         {
             spawnedBounds = spawnedBox->getBounds();
@@ -626,7 +637,6 @@ void Game::checkCollisions()
             }
         }
 
-        // Коллизии с платформами с задержкой
         if (delayedPlatformActive)
         {
             spawnedBounds = spawnedBox->getBounds();
@@ -681,7 +691,57 @@ void Game::checkCollisions()
         spawnedBox->setOnGround(false);
     }
 
-    // ==================== СТОЛКНОВЕНИЕ ПЕРСОНАЖА И СПАВНЕННОЙ КОРОБКИ ====================
+    // ========== КОЛЛИЗИЯ КОРОБКИ С ШИПАМИ ==========
+    if (spawnedBox != nullptr)
+    {
+        sf::FloatRect spawnedBounds = spawnedBox->getBounds();
+
+        for (const auto& spike : spikes)
+        {
+            sf::FloatRect spikeBounds = spike.getBounds();
+
+            if (spawnedBounds.intersects(spikeBounds))
+            {
+                float overlapLeft = (spawnedBounds.left + spawnedBounds.width) - spikeBounds.left;
+                float overlapRight = (spikeBounds.left + spikeBounds.width) - spawnedBounds.left;
+                float overlapTop = (spawnedBounds.top + spawnedBounds.height) - spikeBounds.top;
+                float overlapBottom = (spikeBounds.top + spikeBounds.height) - spawnedBounds.top;
+
+                float minOverlap = std::min(std::min(overlapLeft, overlapRight),
+                    std::min(overlapTop, overlapBottom));
+
+                if (minOverlap == overlapTop &&
+                    spawnedBounds.top + spawnedBounds.height / 2.0f < spikeBounds.top)
+                {
+                    spawnedBox->stopVerticalVelocity();
+                    spawnedBox->setPosition(spawnedBounds.left,
+                        spikeBounds.top - spawnedBounds.height);
+                }
+                else if (minOverlap == overlapBottom)
+                {
+                    spawnedBox->setPosition(spawnedBounds.left,
+                        spikeBounds.top + spikeBounds.height);
+                    spawnedBox->stopVerticalVelocity();
+                }
+                else if (minOverlap == overlapLeft)
+                {
+                    spawnedBox->setPosition(spikeBounds.left - spawnedBounds.width,
+                        spawnedBounds.top);
+                    spawnedBox->stopHorizontalVelocity();
+                }
+                else if (minOverlap == overlapRight)
+                {
+                    spawnedBox->setPosition(spikeBounds.left + spikeBounds.width,
+                        spawnedBounds.top);
+                    spawnedBox->stopHorizontalVelocity();
+                }
+
+                break;
+            }
+        }
+    }
+    // ================================================
+
     if (spawnedBox != nullptr)
     {
         playerBounds = player.getBounds();
@@ -708,18 +768,24 @@ void Game::checkCollisions()
             else if (minOverlap == overlapBottom)
             {
                 player.stopVerticalVelocity();
+                player.setPosition(playerBounds.left,
+                    spawnedBounds.top + spawnedBounds.height);
             }
             else if (minOverlap == overlapLeft)
             {
                 float boxSpeed = 300.0f;
                 spawnedBox->setVelocity(boxSpeed, spawnedBox->getVelocity().y);
                 player.stopHorizontalVelocity();
+                player.setPosition(spawnedBounds.left - playerBounds.width,
+                    playerBounds.top);
             }
             else if (minOverlap == overlapRight)
             {
                 float boxSpeed = 300.0f;
                 spawnedBox->setVelocity(-boxSpeed, spawnedBox->getVelocity().y);
                 player.stopHorizontalVelocity();
+                player.setPosition(spawnedBounds.left + spawnedBounds.width,
+                    playerBounds.top);
             }
         }
         else
@@ -728,7 +794,6 @@ void Game::checkCollisions()
         }
     }
 
-    // ==================== СТОЛКНОВЕНИЕ С ШИПАМИ ====================
     playerBounds = player.getBounds();
     for (int i = 0; i < spikes.size(); i++)
     {
@@ -739,7 +804,6 @@ void Game::checkCollisions()
         }
     }
 
-    // ==================== СБОР КЛЮЧЕЙ ====================
     for (auto& key : keys)
     {
         if (!key.isCollected() && playerBounds.intersects(key.getBounds()))
@@ -752,7 +816,6 @@ void Game::checkCollisions()
         }
     }
 
-    // ==================== ДВЕРЬ ====================
     if (door.getIsOpen() && playerBounds.intersects(door.getBounds()))
     {
         levelComplete = true;
@@ -784,17 +847,17 @@ void Game::render()
 {
     window.clear(sf::Color::Black);
 
+    window.draw(backgroundSprite);
+
     for (auto& ground : grounds)
         ground.draw(window);
 
-    // Рисуем временные платформы если они активны
     if (platformsActive)
     {
         for (auto& tempGround : temporaryGrounds)
             tempGround.draw(window);
     }
 
-    // Рисуем платформы с задержкой если они активны
     if (delayedPlatformActive)
     {
         for (auto& delayedGround : delayedGrounds)
@@ -822,17 +885,14 @@ void Game::render()
 
     player.draw(window);
 
-    // Рисуем Game Over экран
     if (gameOver)
     {
         renderGameOver();
     }
-    // Рисуем Level Complete экран
     else if (levelComplete)
     {
         renderLevelComplete();
     }
-    // Рисуем Pause меню
     else if (isPaused)
     {
         renderPauseMenu();
@@ -843,37 +903,33 @@ void Game::render()
 
 void Game::renderGameOver()
 {
-    // Полупрозрачный фон
     sf::RectangleShape overlay(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
     window.draw(overlay);
 
-    // Текст "GAME OVER"
     sf::Text gameOverText("GAME OVER", font, 80);
     gameOverText.setFillColor(sf::Color::Red);
     gameOverText.setCharacterSize(80);
     gameOverText.setPosition(WINDOW_WIDTH / 2 - 280, 100);
     window.draw(gameOverText);
 
-    // Кнопка "Заново"
     sf::RectangleShape restartButton(sf::Vector2f(200, 60));
     restartButton.setFillColor(sf::Color::Green);
     restartButton.setPosition(350, 400);
     window.draw(restartButton);
 
-    sf::Text restartText("Zaново", font, 30);
+    sf::Text restartText("Restart", font, 30);
     restartText.setFillColor(sf::Color::Black);
     restartText.setCharacterSize(30);
     restartText.setPosition(370, 408);
     window.draw(restartText);
 
-    // Кнопка "Выйти"
     sf::RectangleShape exitButton(sf::Vector2f(200, 60));
     exitButton.setFillColor(sf::Color::Red);
     exitButton.setPosition(650, 400);
     window.draw(exitButton);
 
-    sf::Text exitText("Vyjti", font, 30);
+    sf::Text exitText("Exit", font, 30);
     exitText.setFillColor(sf::Color::White);
     exitText.setCharacterSize(30);
     exitText.setPosition(680, 408);
@@ -882,37 +938,33 @@ void Game::renderGameOver()
 
 void Game::renderLevelComplete()
 {
-    // Полупрозрачный фон
     sf::RectangleShape overlay(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
     window.draw(overlay);
 
-    // Текст "LEVEL COMPLETE!"
     sf::Text completeText("LEVEL COMPLETE!", font, 80);
     completeText.setFillColor(sf::Color::Yellow);
     completeText.setCharacterSize(80);
     completeText.setPosition(WINDOW_WIDTH / 2 - 380, 100);
     window.draw(completeText);
 
-    // Кнопка "Snova" (Снова)
     sf::RectangleShape restartButton(sf::Vector2f(200, 60));
     restartButton.setFillColor(sf::Color::Green);
     restartButton.setPosition(350, 450);
     window.draw(restartButton);
 
-    sf::Text restartText("Snova", font, 30);
+    sf::Text restartText("Restart", font, 30);
     restartText.setFillColor(sf::Color::Black);
     restartText.setCharacterSize(30);
     restartText.setPosition(375, 458);
     window.draw(restartText);
 
-    // Кнопка "Vyjti" (Выйти)
     sf::RectangleShape exitButton(sf::Vector2f(200, 60));
     exitButton.setFillColor(sf::Color::Red);
     exitButton.setPosition(650, 450);
     window.draw(exitButton);
 
-    sf::Text exitText("Vyjti", font, 30);
+    sf::Text exitText("Exit", font, 30);
     exitText.setFillColor(sf::Color::White);
     exitText.setCharacterSize(30);
     exitText.setPosition(680, 458);
@@ -921,31 +973,27 @@ void Game::renderLevelComplete()
 
 void Game::renderPauseMenu()
 {
-    // Полупрозрачный фон
     sf::RectangleShape overlay(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
     overlay.setFillColor(sf::Color(0, 0, 0, 150));
     window.draw(overlay);
 
-    // Текст "PAUZA"
-    sf::Text pauseText("PAUZA", font, 80);
+    sf::Text pauseText("PAUZE", font, 80);
     pauseText.setFillColor(sf::Color::Yellow);
     pauseText.setCharacterSize(80);
     pauseText.setPosition(WINDOW_WIDTH / 2 - 150, 80);
     window.draw(pauseText);
 
-    // Кнопка "Prodolzhit'" (Продолжить)
     sf::RectangleShape continueButton(sf::Vector2f(180, 60));
     continueButton.setFillColor(sf::Color::Blue);
     continueButton.setPosition(200, 250);
     window.draw(continueButton);
 
-    sf::Text continueText("Prodolzhit", font, 20);
+    sf::Text continueText("Continue", font, 20);
     continueText.setFillColor(sf::Color::White);
     continueText.setCharacterSize(20);
     continueText.setPosition(210, 260);
     window.draw(continueText);
 
-    // Кнопка "Restart"
     sf::RectangleShape restartButton(sf::Vector2f(180, 60));
     restartButton.setFillColor(sf::Color::Green);
     restartButton.setPosition(450, 250);
@@ -957,13 +1005,12 @@ void Game::renderPauseMenu()
     restartText.setPosition(470, 260);
     window.draw(restartText);
 
-    // Кнопка "Vyjti" (Выйти)
     sf::RectangleShape exitButton(sf::Vector2f(180, 60));
     exitButton.setFillColor(sf::Color::Red);
     exitButton.setPosition(700, 250);
     window.draw(exitButton);
 
-    sf::Text exitText("Vyjti", font, 20);
+    sf::Text exitText("Exit", font, 20);
     exitText.setFillColor(sf::Color::White);
     exitText.setCharacterSize(20);
     exitText.setPosition(730, 260);

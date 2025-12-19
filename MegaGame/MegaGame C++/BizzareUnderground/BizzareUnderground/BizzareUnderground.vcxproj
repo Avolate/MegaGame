@@ -162,6 +162,7 @@
     <ClInclude Include="Dart.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Player.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="Dart.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="main.cpp" />

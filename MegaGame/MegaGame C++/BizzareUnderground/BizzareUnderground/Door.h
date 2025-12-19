@@ -1,19 +1,25 @@
 #pragma once
-#include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
 
-class Door
+#include "GameObject.h"
+
+class Door : public GameObject
 {
 private:
-    sf::RectangleShape shape;
-    bool isOpen;  // Открыта ли дверь
+    sf::Texture doorTexture;
+    sf::Sprite doorSprite;
+    bool spriteLoaded;
+
+    bool isOpen;
+    const float WIDTH = 60.0f;
+    const float HEIGHT = 80.0f;
 
 public:
-    Door(float x, float y);
-    
-    void draw(sf::RenderWindow& window);
-    sf::FloatRect getBounds() const;
-    
-    bool getIsOpen() const;
+    Door(float startX, float startY);
+
+    void update(float deltaTime) override;
+    void draw(sf::RenderWindow& window) override;
+
     void open();
     void close();
+    bool getIsOpen() const;
 };

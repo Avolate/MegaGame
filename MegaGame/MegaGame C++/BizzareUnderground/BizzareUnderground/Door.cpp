@@ -1,31 +1,39 @@
 #include "Door.h"
 
-Door::Door(float x, float y) : isOpen(false)
+Door::Door(float startX, float startY)
+    : GameObject(startX, startY), isOpen(false), spriteLoaded(false)
 {
-    // Создаём прямоугольник двери
-    shape.setSize(sf::Vector2f(50.0f, 80.0f));
+    shape.setSize(sf::Vector2f(WIDTH, HEIGHT));
+    shape.setFillColor(sf::Color::Blue);
     shape.setPosition(x, y);
-    shape.setFillColor(sf::Color::Magenta);  // Закрытая дверь - фиолетовая
+
+    // ========== ЗАГРУЖАЕМ СПРАЙТ ==========
+    doorTexture.loadFromFile("../x64/Debug/door.png");
+    doorTexture.loadFromFile("../../x64/Debug/door.png");
+    spriteLoaded = true;
+    doorSprite.setTexture(doorTexture);
+
+    float scaleX = WIDTH / doorTexture.getSize().x;
+    float scaleY = HEIGHT / doorTexture.getSize().y;
+    doorSprite.setScale(scaleX, scaleY);
+    doorSprite.setPosition(x, y);
 }
 
-void Door::draw(sf::RenderWindow& window)
+void Door::update(float deltaTime)
 {
-    // Меняем цвет в зависимости от открыта ли дверь
-    if (isOpen)
-    {
-        shape.setFillColor(sf::Color::Green);  // Открытая дверь - зелёная
-    }
-    else
-    {
-        shape.setFillColor(sf::Color::Magenta);  // Закрытая дверь - фиолетовая
-    }
-    
-    window.draw(shape);
+    // Дверь статична - ничего не делаем
 }
 
-sf::FloatRect Door::getBounds() const
+void Door::open()
 {
-    return shape.getGlobalBounds();
+    isOpen = true;
+    shape.setFillColor(sf::Color::Green);
+}
+
+void Door::close()
+{
+    isOpen = false;
+    shape.setFillColor(sf::Color::Blue);
 }
 
 bool Door::getIsOpen() const
@@ -33,12 +41,12 @@ bool Door::getIsOpen() const
     return isOpen;
 }
 
-void Door::open()
+void Door::draw(sf::RenderWindow& window)
 {
-    isOpen = true;
-}
+    window.draw(shape);
 
-void Door::close()
-{
-    isOpen = false;
+    if (spriteLoaded)
+    {
+        window.draw(doorSprite);
+    }
 }

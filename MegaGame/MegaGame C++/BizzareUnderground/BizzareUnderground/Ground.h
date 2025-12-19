@@ -1,14 +1,21 @@
 #pragma once
-#include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
 
-class Ground
+#include "GameObject.h"
+
+class Ground : public GameObject
 {
 private:
-    sf::RectangleShape shape;
+    static sf::Texture groundTexture;
+    sf::Sprite groundSprite;
+    bool spriteLoaded;
+
+    float width, height;
 
 public:
-    Ground(float x, float y, float width, float height);
-    
-    void draw(sf::RenderWindow& window);
-    sf::FloatRect getBounds() const;
+    Ground(float startX, float startY, float w, float h);
+
+    static void loadGroundTexture();
+
+    void update(float deltaTime) override;
+    void draw(sf::RenderWindow& window) override;
 };

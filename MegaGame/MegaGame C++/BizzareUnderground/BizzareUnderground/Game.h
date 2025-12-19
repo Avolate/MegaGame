@@ -1,5 +1,5 @@
 #pragma once
-#include <C:\Users\olegb\OneDrive\Documents\BizzareUnderground\BizzareUnderground\SFML-include\SFML\Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <vector>
 #include "Player.h"
 #include "Ground.h"
@@ -15,6 +15,11 @@ class Game
 private:
     sf::RenderWindow window;
     sf::Font font;
+
+    // ========== ФОН ==========
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite;
+    // =======================
 
     Player player;
     Box* spawnedBox;

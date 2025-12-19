@@ -1,125 +1,182 @@
 #include "Player.h"
 
-Player::Player(float startX, float startY)
-    : moveSpeed(250.0f), jumpForce(600.0f), gravity(1000.0f),
-    maxFallSpeed(1000.0f), isOnGround(false), groundY(startY),
-    startX(startX), startY(startY)
-{
-    // Инициализация тела персонажа
-    body.setSize(sf::Vector2f(40.0f, 60.0f));
-    body.setPosition(startX, startY);
-    body.setFillColor(sf::Color::Blue);
+// Инициализация статических переменных
+sf::Texture Player::playerTexture;
+bool Player::textureLoaded = false;
+bool Player::textureInitialized = false;
 
-    // Инициализация скорости
-    velocity = sf::Vector2f(0.0f, 0.0f);
+void Player::loadPlayerTexture()
+{
+    if (textureInitialized)
+        return;
+
+    textureInitialized = true;
+
+    // ========== ЗАГРУЖАЕМ СПРАЙТ ОДИН РАЗ ==========
+    if (playerTexture.loadFromFile("../x64/Debug/player.png") ||
+        playerTexture.loadFromFile("../../x64/Debug/player.png"))
+    {
+        textureLoaded = true;
+
+    }
+    else
+    {
+        textureLoaded = false;
+
+    }
+    // ===============================================
+}
+
+Player::Player(float startX, float startY)
+    : x(startX), y(startY), velocityX(0.0f), velocityY(0.0f), onGround(false)
+{
+    shape.setSize(sf::Vector2f(WIDTH, HEIGHT));
+    shape.setFillColor(sf::Color::Transparent);
+    shape.setPosition(x, y);
+
+    // ========== ИНИЦИАЛИЗИРУЕМ СПРАЙТ ==========
+    initSprite();
+    // ==========================================
+}
+
+void Player::initSprite()
+{
+    if (textureLoaded)
+    {
+        // Привязываем текстуру к спрайту
+        playerSprite.setTexture(playerTexture);
+
+        // Масштабируем спрайт по размеру плеера
+        unsigned int texWidth = playerTexture.getSize().x;
+        unsigned int texHeight = playerTexture.getSize().y;
+
+        if (texWidth > 0 && texHeight > 0)
+        {
+            float scaleX = WIDTH / texWidth;
+            float scaleY = HEIGHT / texHeight;
+            playerSprite.setScale(scaleX, scaleY);
+        }
+
+        playerSprite.setPosition(x, y);
+    }
+    else
+    {
+
+    }
 }
 
 void Player::handleInput()
 {
-    // Горизонтальное движение
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    // ========== ДВИЖЕНИЕ ВЛЕВО-ВПРАВО ==========
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
-        velocity.x = -moveSpeed;
+        velocityX = -MOVE_SPEED;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
+        sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
-        velocity.x = moveSpeed;
+        velocityX = MOVE_SPEED;
     }
     else
     {
-        velocity.x = 0.0f;
+        velocityX = 0.0f;
     }
+    // ===========================================
 
-    // Прыжок
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && isOnGround)
+    // ========== ПРЫГАНИЕ ==========
+    if (onGround)
     {
-        velocity.y = -jumpForce;
-        isOnGround = false;
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Space) ||
+            sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        {
+            velocityY = -JUMP_FORCE;
+            onGround = false;
+        }
     }
+    // ==============================
 }
 
 void Player::update(float deltaTime)
 {
     handleInput();
 
-    // Применение гравитации
-    if (!isOnGround)
-    {
-        velocity.y += gravity * deltaTime;
-        if (velocity.y > maxFallSpeed)
-            velocity.y = maxFallSpeed;
-    }
-    else
-    {
-        // Если на земле и не прыгаем, обнуляем вертикальную скорость
-        if (velocity.y > 0.0f)
-            velocity.y = 0.0f;
-    }
+    // Применяем гравитацию
+    velocityY += GRAVITY * deltaTime;
 
-    // Обновление позиции
-    sf::Vector2f newPos = body.getPosition();
-    newPos.x += velocity.x * deltaTime;
-    newPos.y += velocity.y * deltaTime;
+    // Ограничиваем максимальную скорость падения
+    if (velocityY > 600.0f)
+        velocityY = 600.0f;
 
-    // Проверка границ экрана (не даем выйти за боковые границы)
-    if (newPos.x < 0)
-        newPos.x = 0;
-    if (newPos.x + body.getSize().x > 1200)
-        newPos.x = 1200 - body.getSize().x;
+    // Обновляем позицию
+    x += velocityX * deltaTime;
+    y += velocityY * deltaTime;
 
-    // Если персонаж упал ниже экрана, возвращаем его на начальную позицию
-    if (newPos.y > 800)
+    // Границы экрана (слева-справа)
+    if (x < 0.0f)
+        x = 0.0f;
+    if (x + WIDTH > 1200.0f)
+        x = 1200.0f - WIDTH;
+
+    // Если персонаж упал ниже экрана - перезагружаем
+    if (y > 800.0f)
     {
-        respawn();
-        return;
+        x = 100.0f;
+        y = 550.0f;
+        velocityX = 0.0f;
+        velocityY = 0.0f;
     }
 
-    body.setPosition(newPos);
+    // Обновляем позицию прямоугольника
+    shape.setPosition(x, y);
+
+    // Обновляем позицию спрайта
+    if (textureLoaded)
+    {
+        playerSprite.setPosition(x, y);
+    }
 }
 
 void Player::draw(sf::RenderWindow& window)
 {
-    window.draw(body);
+    // Рисуем синий прямоугольник
+    window.draw(shape);
+
+    // Рисуем спрайт поверх
+    if (textureLoaded)
+    {
+        window.draw(playerSprite);
+    }
 }
 
-sf::FloatRect Player::getBounds() const
+void Player::setPosition(float newX, float newY)
 {
-    return body.getGlobalBounds();
+    x = newX;
+    y = newY;
+    shape.setPosition(x, y);
+
+    if (textureLoaded)
+    {
+        playerSprite.setPosition(x, y);
+    }
 }
 
-float Player::getY() const
+void Player::setOnGround(bool ground)
 {
-    return body.getPosition().y;
-}
-
-void Player::setOnGround(bool grounded)
-{
-    isOnGround = grounded;
-}
-
-void Player::setGroundY(float y)
-{
-    groundY = y;
-}
-
-void Player::setPosition(float x, float y)
-{
-    body.setPosition(x, y);
+    onGround = ground;
 }
 
 void Player::stopVerticalVelocity()
 {
-    velocity.y = 0.0f;
+    velocityY = 0.0f;
 }
 
 void Player::stopHorizontalVelocity()
 {
-    velocity.x = 0.0f;
+    velocityX = 0.0f;
 }
 
-void Player::respawn()
+sf::FloatRect Player::getBounds() const
 {
-    body.setPosition(startX, startY);
-    velocity = sf::Vector2f(0.0f, 0.0f);
-    isOnGround = false;
+    return shape.getGlobalBounds();
 }
