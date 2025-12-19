@@ -9,7 +9,7 @@ Castle::Castle() : GameObject(), health(3)
 	isActive = true;
 
 	// Загружаем спрайт замка (castle 430x830)
-	if (!texture.loadFromFile("assets/castle.png"))
+	if (!texture.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\FlyingDangerC++\\assets/castle.png"))
 	{
 		// Fallback
 	}

@@ -9,7 +9,7 @@ Projectile::Projectile(float startX, float startY) : GameObject()
 	isActive = true;
 
 	// Загружаем спрайт пули (laserred 24x7)
-	if (!texture.loadFromFile("assets/laserred.png"))
+	if (!texture.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\FlyingDangerC++\\assets/laserred.png"))
 	{
 		// Fallback
 	}

@@ -11,7 +11,7 @@ Boulder::Boulder() : GameObject()
 	isActive = true;
 
 	// Загружаем спрайт метеора (stone 64x64)
-	if (!texture.loadFromFile("assets/stone.png"))
+	if (!texture.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\FlyingDangerC++\\assets/stone.png"))
 	{
 		// Fallback
 	}

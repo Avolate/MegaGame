@@ -9,7 +9,7 @@ BossBoulder::BossBoulder() : GameObject(), health(10)
 	isActive = true;
 
 	// Загружаем спрайт босса (boss 500x500)
-	if (!texture.loadFromFile("assets/boss.png"))
+	if (!texture.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\FlyingDangerC++\\assets/boss.png"))
 	{
 		// Fallback
 	}

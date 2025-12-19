@@ -23,8 +23,8 @@ GameManager::GameManager()
 	archer = new Archer();
 	castle = new Castle();
 
-	bgTexture1.loadFromFile("assets/Background_1.png");
-	bgTexture2.loadFromFile("assets/Background_2.png");
+	bgTexture1.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\FlyingDangerC++\\assets\\Background_1.png");
+	bgTexture2.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\FlyingDangerC++\\assets/Background_2.png");
 
 	bgSprite2.setTexture(bgTexture2);
 	bgSprite2.setScale(3.0f, 3.0f);

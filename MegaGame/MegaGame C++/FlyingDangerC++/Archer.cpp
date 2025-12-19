@@ -9,7 +9,7 @@ Archer::Archer() : GameObject(), mouseX(800.0f), mouseY(400.0f)
 	isActive = true;
 
 	// Загружаем спрайт игрока (john_idle 36x37)
-	if (!textureJohn.loadFromFile("assets/john_idle.png"))
+	if (!textureJohn.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\FlyingDangerC++\\assets/john_idle.png"))
 	{
 		// Fallback
 	}
@@ -18,7 +18,7 @@ Archer::Archer() : GameObject(), mouseX(800.0f), mouseY(400.0f)
 	spritePlayer.setPosition(x, y);
 
 	// Загружаем спрайт платформы (landpl 198x154)
-	if (!texturePlatform.loadFromFile("assets/landpl.png"))
+	if (!texturePlatform.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\FlyingDangerC++\\assets/landpl.png"))
 	{
 		// Fallback
 	}
@@ -34,7 +34,6 @@ void Archer::setMousePos(float mx, float my)
 
 void Archer::update(float deltaTime)
 {
-	// ИСПРАВЛЕНО: Используем прямое движение вместо плавного
 	// Это устраняет дрожание/дергание при движении
 	const float minY = 0.0f;
 	const float maxY = 800.0f - 100.0f;

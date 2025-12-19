@@ -10,7 +10,7 @@ HealthPotion::HealthPotion() : GameObject()
 	isActive = true;
 
 	// «агружаем спрайт здоровь€ (stone3, используем stone)
-	if (!texture.loadFromFile("assets/stone.png"))
+	if (!texture.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\FlyingDangerC++\\assets/stone.png"))
 	{
 		// Fallback
 	}

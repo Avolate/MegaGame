@@ -122,28 +122,28 @@ Game::~Game() {
 }
 
 void Game::loadTextures() {
-    if (!backgroundTex.loadFromFile("assets/background.png")) {
+    if (!backgroundTex.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\CandyRainC++\\assets/background.png")) {
         std::cerr << "Error loading background!" << std::endl;
     }
-    if (!candyTex.loadFromFile("assets/candy.png")) {
+    if (!candyTex.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\CandyRainC++\\assets/candy.png")) {
         std::cerr << "Error loading candy!" << std::endl;
     }
-    if (!donutTex.loadFromFile("assets/donut.png")) {
+    if (!donutTex.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\CandyRainC++\\assets/donut.png")) {
         std::cerr << "Error loading donut!" << std::endl;
     }
-    if (!lollipopTex.loadFromFile("assets/lollipop.png")) {
+    if (!lollipopTex.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\CandyRainC++\\assets/lollipop.png")) {
         std::cerr << "Error loading lollipop!" << std::endl;
     }
-    if (!cakeTex.loadFromFile("assets/cake.png")) {
+    if (!cakeTex.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\CandyRainC++\\assets/cake.png")) {
         std::cerr << "Error loading cake!" << std::endl;
     }
-    if (!trashTex.loadFromFile("assets/trash.png")) {
+    if (!trashTex.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\CandyRainC++\\assets/trash.png")) {
         std::cerr << "Error loading trash!" << std::endl;
     }
-    if (!heartTex.loadFromFile("assets/heart.png")) {
+    if (!heartTex.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\CandyRainC++\\assets/heart.png")) {
         std::cerr << "Error loading heart!" << std::endl;
     }
-    if (!playerTex.loadFromFile("assets/player.png")) {
+    if (!playerTex.loadFromFile("D:\\MegaGame\\MegaGame\\MegaGame C++\\CandyRainC++\\assets/player.png")) {
         std::cerr << "Error loading player!" << std::endl;
     }
 
